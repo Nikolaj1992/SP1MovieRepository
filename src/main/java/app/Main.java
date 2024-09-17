@@ -10,10 +10,10 @@ public class Main {
 
         ApiReader apiReader = new ApiReader();
 
-        List<MovieDTO> movies = apiReader.readMovieMultiple();
-        movies.forEach(System.out::println);
+        apiReader.readMovieMultiple();
+        apiReader.apiMovies.forEach(System.out::println);
         apiReader.apiCasts.forEach(System.out::println);
-        System.out.println("Amount of movies: " + movies.size());
+        System.out.println("Amount of movies: " + apiReader.apiMovies.size());
         System.out.println("Amount of casts: " + apiReader.apiCasts.size());
 
     }
