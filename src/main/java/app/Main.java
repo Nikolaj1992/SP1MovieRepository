@@ -1,6 +1,8 @@
 package app;
 
 import app.api.ApiReader;
+import app.entities.dtos.MovieDTO;
+import app.services.MovieService;
 import app.config.HibernateConfig;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,6 +18,11 @@ public class Main {
 
         ApiReader reader = new ApiReader();
         reader.read(fullUrl);
+
+        System.out.println("-----------==-----------");
+        MovieService movieService = new MovieService(apiKey);
+        MovieDTO movie = movieService.getMovieById(533535);
+        System.out.println(movie);
 
 //        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
 //        EntityManager em = emf.createEntityManager();
