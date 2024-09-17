@@ -1,6 +1,6 @@
-package app.entities;
+package app.entities.special_entities;
 
-import app.api.deserializers.CastIdDeserializer;
+import app.api.custom_deserializers.CastIdDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieCast {
+public class MovieCast { //TODO: change this method to function in a way that lets the illustration from 17/09/2024
     @JsonProperty("id")
     private int id;
     @JsonProperty("cast")

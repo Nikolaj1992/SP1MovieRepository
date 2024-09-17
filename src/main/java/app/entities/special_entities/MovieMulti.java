@@ -1,6 +1,6 @@
 package app.entities.special_entities;
 
-import app.api.deserializers.MovieMultiIdDeserializer;
+import app.api.custom_deserializers.MovieMultiIdDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

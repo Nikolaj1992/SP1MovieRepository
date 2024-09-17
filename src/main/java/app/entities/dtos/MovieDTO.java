@@ -1,12 +1,11 @@
 package app.entities.dtos;
 
-import app.api.deserializers.GenreNameDeserializer;
+import app.api.custom_deserializers.GenreNameDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter
