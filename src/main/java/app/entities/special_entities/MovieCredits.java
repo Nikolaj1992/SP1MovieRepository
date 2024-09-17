@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieCast { //TODO: change this method to function in a way that lets the illustration from 17/09/2024
+public class MovieCredits { //TODO: change this method to function in a way that lets the illustration from 17/09/2024
     @JsonProperty("id")
     private int id;
     @JsonProperty("cast")

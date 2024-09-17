@@ -1,7 +1,7 @@
 package app.api;
 
 import app.constants.LinkConstants;
-import app.entities.special_entities.MovieCast;
+import app.entities.special_entities.MovieCredits;
 import app.entities.dtos.MovieDTO;
 import app.entities.special_entities.MovieMulti;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -19,7 +19,7 @@ import java.util.List;
 public class ApiReader {
     ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
     final String API_KEY = System.getenv("TMDB_API_KEY");
-    public List<MovieCast> apiCasts = new ArrayList<>();
+    public List<MovieCredits> apiCredits = new ArrayList<>();
     public List<MovieDTO> apiMovies = new ArrayList<>();
 
     public List<MovieDTO> readMovieMultiple(){
@@ -65,7 +65,7 @@ public class ApiReader {
                 movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
 //            System.out.println(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-                apiCasts.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+                apiCredits.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
             }
         } if (totalPages > 0) {
             for (int j = 2; j < totalPages+1; j++) {
@@ -102,7 +102,7 @@ public class ApiReader {
                 for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
                     movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
                     apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-                    apiCasts.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+                    apiCredits.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 }
             }
         }
@@ -145,9 +145,9 @@ public class ApiReader {
         return movie;
     }
 
-    public MovieCast readCastByMovieId(String id) { //incomplete method
+    public MovieCredits readCastByMovieId(String id) { //incomplete method
         ApiReader apiReader = new ApiReader();
-        MovieCast cast = null;
+        MovieCredits cast = null;
         String urlPeople = LinkConstants.MOVIE_CAST_LINK.replace("#",API_KEY);
         urlPeople = urlPeople.replace("!",id);
         try {
@@ -200,9 +200,9 @@ public class ApiReader {
         }
     }
 
-    private MovieCast jsonToCastDtoSingle(String jsonString){
+    private MovieCredits jsonToCastDtoSingle(String jsonString){
         try {
-            return om.readValue(jsonString, MovieCast.class);
+            return om.readValue(jsonString, MovieCredits.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
