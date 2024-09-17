@@ -60,6 +60,7 @@ public class ApiReader {
 //            System.out.println(movieMulti.getMovieIds().get(i));
             movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
 //            System.out.println(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+            apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
             apiCasts.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
         }
 //        for (int i = 0; i < movieMulti.getTotalPages(); i++) { //run this 1 less time because the first/original request is page one
