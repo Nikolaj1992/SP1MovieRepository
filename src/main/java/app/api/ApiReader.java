@@ -28,44 +28,81 @@ public class ApiReader {
         urlMulti = urlMulti.replace("!","1");
         MovieMulti movieMulti = null;
         List<MovieDTO> movies = new ArrayList<>();
-        try {
-            // Create an HttpClient instance
-            HttpClient client = HttpClient.newHttpClient();
+        int totalPages = 0;
+        if (totalPages == 0) {
+            try {
+                // Create an HttpClient instance
+                HttpClient client = HttpClient.newHttpClient();
 
-            // Create a request
-            HttpRequest request1 = HttpRequest.newBuilder()
-                    .version(HttpClient.Version.HTTP_1_1)
-                    .uri(new URI(urlMulti))
-                    .GET()
-                    .build();
+                // Create a request
+                HttpRequest request1 = HttpRequest.newBuilder()
+                        .version(HttpClient.Version.HTTP_1_1)
+                        .uri(new URI(urlMulti))
+                        .GET()
+                        .build();
 
-            // Send the request and get the response
-            HttpResponse<String> response1 = client.send(request1, HttpResponse.BodyHandlers.ofString());
+                // Send the request and get the response
+                HttpResponse<String> response1 = client.send(request1, HttpResponse.BodyHandlers.ofString());
 
-            // Check the status code and print the response
-            if (response1.statusCode() == 200) {
-                String body = response1.body();
+                // Check the status code and print the response
+                if (response1.statusCode() == 200) {
+                    String body = response1.body();
 //                System.out.println(body);
 //                System.out.println("--------------------");
-                movieMulti = apiReader.jsonToDtoMulti(body);
+                    movieMulti = apiReader.jsonToDtoMulti(body);
 //                System.out.println(movieMulti);
-            } else {
-                System.out.println("Multi: GET request failed. Status code: " + response1.statusCode());
+                    totalPages = movieMulti.getTotalPages();
+                    System.out.println("Total Pages: " + totalPages);
+                } else {
+                    System.out.println("Multi: GET request failed. Status code: " + response1.statusCode());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
+            for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
 //            System.out.println(movieMulti.getMovieIds().get(i));
-            movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
+                movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
 //            System.out.println(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
-            apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-            apiCasts.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+                apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
+                apiCasts.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+            }
+        } if (totalPages > 0) {
+            for (int j = 2; j < totalPages+1; j++) {
+                String jString = String.valueOf(j);
+                urlMulti = urlMulti.replace("!",jString);
+                try {
+                    // Create an HttpClient instance
+                    HttpClient client = HttpClient.newHttpClient();
+
+                    // Create a request
+                    HttpRequest request1 = HttpRequest.newBuilder()
+                            .version(HttpClient.Version.HTTP_1_1)
+                            .uri(new URI(urlMulti))
+                            .GET()
+                            .build();
+
+                    // Send the request and get the response
+                    HttpResponse<String> response1 = client.send(request1, HttpResponse.BodyHandlers.ofString());
+
+                    // Check the status code and print the response
+                    if (response1.statusCode() == 200) {
+                        String body = response1.body();
+                        movieMulti = apiReader.jsonToDtoMulti(body);
+                    } else {
+                        System.out.println("Multi: GET request failed. Status code: " + response1.statusCode());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
+                    movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
+                    apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
+                    apiCasts.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+                }
+            }
         }
-//        for (int i = 0; i < movieMulti.getTotalPages(); i++) { //run this 1 less time because the first/original request is page one
-//            System.out.println(movieMulti.getMovieIds().get(i));
-//        }
 
         return movies;
     }
