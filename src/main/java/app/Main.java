@@ -2,30 +2,31 @@ package app;
 
 import app.api.ApiReader;
 import app.entities.dtos.MovieDTO;
-import app.services.MovieService;
-import app.config.HibernateConfig;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-        String apiKey = System.getenv("TMDB_API_KEY");
-        String url = "https://api.themoviedb.org/3/movie/💥?api_key=#";
-        String fullUrl = url.replace("#",apiKey);
-        fullUrl = fullUrl.replace("💥","533535");
-        System.out.println(fullUrl);
+//        String apiKey = System.getenv("TMDB_API_KEY");
+//        String url = "https://api.themoviedb.org/3/movie/💥?api_key=#";
+//        String fullUrl = url.replace("#",apiKey);
+//        fullUrl = fullUrl.replace("💥","533535");
+//        System.out.println(apiKey);
+//        System.out.println(fullUrl);
+//
+//        String urlMulti = "https://api.themoviedb.org/3/discover/movie?api_key=#&with_original_language=da&region=DK&page=!";
+//        String fullUrlMulti = urlMulti.replace("#",apiKey);
+//        fullUrlMulti = fullUrlMulti.replace("!","1");
+//        System.out.println(fullUrlMulti);
 
-        ApiReader reader = new ApiReader();
-        reader.read(fullUrl);
-
-        System.out.println("-----------==-----------");
-        MovieService movieService = new MovieService(apiKey);
-        MovieDTO movie = movieService.getMovieById(533535);
-        System.out.println(movie);
-
-//        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
-//        EntityManager em = emf.createEntityManager();
+        ApiReader apiReader = new ApiReader();
+//        apiReader.readMultiple(fullUrlMulti);
+        List<MovieDTO> movies = apiReader.readMovieMultiple();
+        movies.forEach(System.out::println);
+        apiReader.apiCasts.forEach(System.out::println);
+        System.out.println("Amount of movies: " + movies.size());
+        System.out.println("Amount of casts: " + apiReader.apiCasts.size());
 
     }
 }
