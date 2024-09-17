@@ -70,7 +70,10 @@ public class ApiReader {
         } if (totalPages > 0) {
             for (int j = 2; j < totalPages+1; j++) {
                 String jString = String.valueOf(j);
-                urlMulti = urlMulti.replace("!",jString);
+                String jStringPrevious = String.valueOf(j-1);
+                System.out.println("Currently on page: " + jString + "out of " + totalPages);
+                urlMulti = urlMulti.replace("page="+jStringPrevious,"page="+jString);
+                System.out.println(urlMulti);
                 try {
                     // Create an HttpClient instance
                     HttpClient client = HttpClient.newHttpClient();
