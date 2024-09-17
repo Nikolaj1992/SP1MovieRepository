@@ -1,6 +1,7 @@
 package app.entities.special_entities;
 
 import app.api.custom_deserializers.CastIdDeserializer;
+import app.api.custom_deserializers.CrewIdDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -19,5 +20,8 @@ public class MovieCast { //TODO: change this method to function in a way that le
     private int id;
     @JsonProperty("cast")
     @JsonDeserialize(using = CastIdDeserializer.class)
-    private List<Integer> ids;
+    private List<Integer> castIds;
+    @JsonProperty("crew")
+    @JsonDeserialize(using = CrewIdDeserializer.class)
+    private List<Integer> crewIds;
 }
