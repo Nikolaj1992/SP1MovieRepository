@@ -1,4 +1,4 @@
-package app.api.deserializers;
+package app.api.custom_deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

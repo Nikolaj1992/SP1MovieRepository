@@ -1,7 +1,7 @@
 package app.api;
 
 import app.constants.LinkConstants;
-import app.entities.MovieCast;
+import app.entities.special_entities.MovieCast;
 import app.entities.dtos.MovieDTO;
 import app.entities.special_entities.MovieMulti;
 import com.fasterxml.jackson.core.JsonProcessingException;

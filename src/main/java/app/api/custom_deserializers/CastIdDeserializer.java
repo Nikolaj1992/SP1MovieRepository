@@ -1,4 +1,4 @@
-package app.api.deserializers;
+package app.api.custom_deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CastIdDeserializer extends JsonDeserializer<List<Integer>>  {
+public class CastIdDeserializer extends JsonDeserializer<List<Integer>>  { //TODO: figure out the magic behind this
     @Override
     public List<Integer> deserialize(JsonParser jsonParser, DeserializationContext context)
             throws IOException, JsonProcessingException {
