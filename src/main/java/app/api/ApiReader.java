@@ -71,7 +71,7 @@ public class ApiReader {
             for (int j = 2; j < totalPages+1; j++) {
                 String jString = String.valueOf(j);
                 String jStringPrevious = String.valueOf(j-1);
-                System.out.println("Currently on page: " + jString + "out of " + totalPages);
+                System.out.println("Currently on page: " + jString + " out of " + totalPages);
                 urlMulti = urlMulti.replace("page="+jStringPrevious,"page="+jString);
                 System.out.println(urlMulti);
                 try {
