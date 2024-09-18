@@ -1,4 +1,4 @@
-package app.api;
+package app.services;
 
 import app.constants.LinkConstants;
 import app.entities.special_entities.MovieCredits;
@@ -51,7 +51,8 @@ public class ApiReader {
 //                System.out.println("--------------------");
                     movieMulti = apiReader.jsonToDtoMulti(body);
 //                System.out.println(movieMulti);
-                    totalPages = movieMulti.getTotalPages();
+//                    totalPages = movieMulti.getTotalPages();
+                    totalPages = 3;
                     System.out.println("Total Pages: " + totalPages);
                 } else {
                     System.out.println("Multi: GET request failed. Status code: " + response1.statusCode());
@@ -59,7 +60,7 @@ public class ApiReader {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            System.out.println("Currently on page: 1 out of " + totalPages);
             for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
 //            System.out.println(movieMulti.getMovieIds().get(i));
                 movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
@@ -67,13 +68,12 @@ public class ApiReader {
                 apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
                 apiCredits.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
             }
-        } if (totalPages > 0) {
+        } if (totalPages > 1) {
             for (int j = 2; j < totalPages+1; j++) {
                 String jString = String.valueOf(j);
                 String jStringPrevious = String.valueOf(j-1);
                 System.out.println("Currently on page: " + jString + " out of " + totalPages);
                 urlMulti = urlMulti.replace("page="+jStringPrevious,"page="+jString);
-                System.out.println(urlMulti);
                 try {
                     // Create an HttpClient instance
                     HttpClient client = HttpClient.newHttpClient();
@@ -105,8 +105,8 @@ public class ApiReader {
                     apiCredits.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 }
             }
+        System.out.println("Finished fetching all " + totalPages + " pages");
         }
-
         return movies;
     }
 
