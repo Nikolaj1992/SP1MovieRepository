@@ -1,6 +1,6 @@
 package app.entities.dtos;
 
-import app.api.custom_deserializers.GenreNameDeserializer;
+import app.custom_deserializers.GenreNameDeserializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

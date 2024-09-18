@@ -1,4 +1,4 @@
-package app.api.custom_deserializers;
+package app.custom_deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CastIdDeserializer extends JsonDeserializer<List<Integer>>  { //TODO: figure out the magic behind this
+public class MovieMultiIdDeserializer extends JsonDeserializer<List<Integer>> { //TODO: figure out the magic behind this
     @Override
     public List<Integer> deserialize(JsonParser jsonParser, DeserializationContext context)
             throws IOException, JsonProcessingException {
@@ -19,8 +19,8 @@ public class CastIdDeserializer extends JsonDeserializer<List<Integer>>  { //TOD
 
         // Traverse the "results" array and extract "id"
         if (node.isArray()) {
-            for (JsonNode castNode : node) {
-                int id = castNode.get("id").asInt();
+            for (JsonNode movieNode : node) {
+                int id = movieNode.get("id").asInt();
                 ids.add(id);
             }
         }

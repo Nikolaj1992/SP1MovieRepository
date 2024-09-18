@@ -1,4 +1,4 @@
-package app.api.custom_deserializers;
+package app.custom_deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,21 +10,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieMultiIdDeserializer extends JsonDeserializer<List<Integer>> { //TODO: figure out the magic behind this
+public class GenreNameDeserializer extends JsonDeserializer<List<String>> { //TODO: figure out the magic behind this
     @Override
-    public List<Integer> deserialize(JsonParser jsonParser, DeserializationContext context)
+    public List<String> deserialize(JsonParser jsonParser, DeserializationContext context)
             throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
-        List<Integer> ids = new ArrayList<>();
+        List<String> genreNames = new ArrayList<>();
 
-        // Traverse the "results" array and extract "id"
+        // Loop through each genre and extract the name
         if (node.isArray()) {
-            for (JsonNode movieNode : node) {
-                int id = movieNode.get("id").asInt();
-                ids.add(id);
+            for (JsonNode genreNode : node) {
+                String genreName = genreNode.get("name").asText();
+                genreNames.add(genreName);
             }
         }
 
-        return ids;
+        return genreNames;
     }
 }
