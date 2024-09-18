@@ -2,6 +2,8 @@ package app.dao;
 
 import app.entities.Movie;
 import app.entities.dtos.MovieDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -10,11 +12,16 @@ import java.util.List;
 
 public class MovieDAO {
 
+    ObjectMapper om = new ObjectMapper();
+
     private static MovieDAO instance;
     private static EntityManagerFactory emf;
 
     private MovieDAO(EntityManagerFactory emf) {
         this.emf = emf;
+        this.om = new ObjectMapper();
+        this.om.registerModule(new JavaTimeModule());
+        this.om.findAndRegisterModules();
     }
 
     public static MovieDAO getInstance(EntityManagerFactory emf) {
@@ -25,6 +32,15 @@ public class MovieDAO {
     }
 
     // Helt basic, metoderne skal naturligvis opdateres/ændres
+
+    public String getAllAsJSON() {
+        List<Movie> movies = findAll();
+        try {
+            return om.writeValueAsString(movies);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to convert movies to JSON", e);
+        }
+    }
 
     public Movie create(Movie entity) {
         try (EntityManager em = emf.createEntityManager()) {
