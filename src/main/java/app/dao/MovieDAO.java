@@ -2,6 +2,7 @@ package app.dao;
 
 import app.entities.Movie;
 import app.entities.dtos.MovieDTO;
+import app.exceptions.DaoException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManager;
@@ -47,23 +48,34 @@ public class MovieDAO {
             em.getTransaction().begin();
             em.persist(entity);
             em.getTransaction().commit();
+            return entity;
+        } catch (Exception e) {
+            throw new DaoException.MovieCreateException(entity, e);
         }
-        return entity;
     }
 
     public int delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Movie deletedMovie = em.find(Movie.class, id);
+            if (deletedMovie == null) {
+                throw new DaoException.MovieNotFoundException(id);
+            }
             em.getTransaction().begin();
             em.remove(deletedMovie);
             em.getTransaction().commit();
             return deletedMovie.getId();    // will work once Movie class has annotations
+        } catch (Exception e) {
+            throw new DaoException.MovieDeleteException(id, e);
         }
     }
 
     public Movie find(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.find(Movie.class, id);
+            Movie movie = em.find(Movie.class, id);
+            if (movie == null) {
+                throw new DaoException.MovieNotFoundException(id);
+            }
+            return movie;
         }
     }
 
@@ -73,6 +85,8 @@ public class MovieDAO {
             Movie updatedMovie = em.merge(entity);
             em.getTransaction().commit();
             return updatedMovie;
+        } catch (Exception e) {
+            throw new DaoException.MovieUpdateException(id, e);
         }
     }
 
@@ -80,6 +94,8 @@ public class MovieDAO {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createQuery("select a from Movie a", Movie.class);
             return query.getResultList();
+        } catch (Exception e) {
+            throw new DaoException.MovieFindAllException(e);
         }
     }
 
