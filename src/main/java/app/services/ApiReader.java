@@ -1,7 +1,9 @@
 package app.services;
 
 import app.constants.LinkConstants;
-import app.entities.special_entities.MovieCredits;
+import app.entities.MovieCredits;
+import app.entities.dtos.ActorDTO;
+import app.entities.dtos.DirectorDTO;
 import app.entities.dtos.MovieDTO;
 import app.entities.special_entities.MovieMulti;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +23,9 @@ public class ApiReader {
     final String API_KEY = System.getenv("TMDB_API_KEY");
     public List<MovieCredits> apiCredits = new ArrayList<>();
     public List<MovieDTO> apiMovies = new ArrayList<>();
+    public List<ActorDTO> apiActors = new ArrayList<>(); //int because im too lazy to currently remove the deserializers
+    public List<DirectorDTO> apiDirectors = new ArrayList<>(); //int because im too lazy to currently remove the deserializers
+    // TODO: make classes void methods since the lists are stored on the class instance
 
     public List<MovieDTO> readMovieMultiple(){
         ApiReader apiReader = new ApiReader();
@@ -66,7 +71,7 @@ public class ApiReader {
                 movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
 //            System.out.println(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-                apiCredits.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+                apiCredits.add(apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
             }
         } if (totalPages > 1) {
             for (int j = 2; j < totalPages+1; j++) {
@@ -102,11 +107,22 @@ public class ApiReader {
                 for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
                     movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
                     apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-                    apiCredits.add(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
+                    apiCredits.add(apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 }
             }
         System.out.println("Finished fetching all " + totalPages + " pages");
         }
+
+        //TODO: create ActorDTOs and DirectorDTOs with checks, using yet another method down here
+        for (MovieCredits credit : apiCredits) {
+            credit.getCastIds().forEach(integer -> apiActors.add(new ActorDTO(integer, "placeholder_name", "placeholder_character")));
+            credit.getCrewIds().forEach(integer -> apiDirectors.add(new DirectorDTO(integer, "placeholder_name", "placeholder_job")));
+            //once the serializer is detached we can do a check on credit.getCrew().getDepartment(); and then get the ones that says "Directing" or somethin
+            // TODO: add these onto movies, they are currently in a huge list that isnt sorted with no connection to a movie
+            // TODO: follow up from above, this can be avoided IF we make a lot of requests to get results for a single actor at the time
+            System.out.println("check");
+        }
+
         return movies;
     }
 
@@ -145,7 +161,7 @@ public class ApiReader {
         return movie;
     }
 
-    public MovieCredits readCastByMovieId(String id) { //incomplete method
+    public MovieCredits readCreditsByMovieId(String id) { //incomplete method
         ApiReader apiReader = new ApiReader();
         MovieCredits cast = null;
         String urlPeople = LinkConstants.MOVIE_CAST_LINK.replace("#",API_KEY);
@@ -177,8 +193,6 @@ public class ApiReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        //TODO: create ActorDTOs and DirectorDTOs with checks, using yet another method down here
 
         return cast;
     }

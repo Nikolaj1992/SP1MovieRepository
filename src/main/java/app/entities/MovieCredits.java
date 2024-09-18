@@ -1,4 +1,4 @@
-package app.entities.special_entities;
+package app.entities;
 
 import app.custom_deserializers.CastIdDeserializer;
 import app.custom_deserializers.CrewIdDeserializer;

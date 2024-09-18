@@ -12,6 +12,8 @@ public class Main {
 //        apiReader.apiCredits.forEach(System.out::println);
         System.out.println("Amount of movies: " + apiReader.apiMovies.size());
         System.out.println("Amount of credits: " + apiReader.apiCredits.size());
+        apiReader.apiActors.forEach(System.out::println);
+        apiReader.apiDirectors.forEach(System.out::println);
 
     }
 }
