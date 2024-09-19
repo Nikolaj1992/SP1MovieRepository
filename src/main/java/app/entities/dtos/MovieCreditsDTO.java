@@ -39,4 +39,6 @@ public class MovieCreditsDTO { //TODO: change this method to function in a way t
                 .collect(Collectors.toList()) : new ArrayList<>();
     }
 
+    private MovieDTO movie;
+
 }
