@@ -33,6 +33,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
         return instance;
     }
 
+    // A little experimental, not yet included elsewhere
     public String getAllAsJSON() {
         List<MovieDTO> movies = findAll();
         try {
@@ -41,9 +42,6 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
             throw new RuntimeException("Failed to convert movies to JSON", e);
         }
     }
-
-    // TODO dao methods should accept and return DTOs, once we have our entities and DTOs fully done, edit these
-    // TODO an idea could be to use Jons example from the ActivityLogger solution?
 
     @Override
     public MovieDTO create(MovieDTO mDto) {
@@ -54,7 +52,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
             em.getTransaction().commit();
             return mDto;
         } catch (Exception e) {
-            throw new DaoException.MovieCreateException(mDto, e);
+            throw new DaoException.EntityCreateException(Movie.class, e);
         }
     }
 
@@ -63,14 +61,14 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             Movie deletedMovie = em.find(Movie.class, id);
             if (deletedMovie == null) {
-                throw new DaoException.MovieNotFoundException(id);
+                throw new DaoException.EntityNotFoundException(Movie.class, id);
             }
             em.getTransaction().begin();
             em.remove(deletedMovie);
             em.getTransaction().commit();
             return deletedMovie.getId();
         } catch (Exception e) {
-            throw new DaoException.MovieDeleteException(id, e);
+            throw new DaoException.EntityDeleteException(Movie.class, id, e);
         }
     }
 
@@ -79,7 +77,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             Movie movie = em.find(Movie.class, id);
             if (movie == null) {
-                throw new DaoException.MovieNotFoundException(id);
+                throw new DaoException.EntityNotFoundException(Movie.class, id);
             }
             return new MovieDTO(movie);
         }
@@ -91,7 +89,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
             em.getTransaction().begin();
             Movie movie = em.find(Movie.class, id);
             if (movie == null) {
-                throw new DaoException.MovieNotFoundException(id);
+                throw new DaoException.EntityNotFoundException(Movie.class, id);
             }
             movie.setTitle(mDto.getTitle());
             movie.setOverview(mDto.getOverview());
@@ -107,7 +105,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
 
             return new MovieDTO(updatedMovie);
         } catch (Exception e) {
-            throw new DaoException.MovieUpdateException(id, e);
+            throw new DaoException.EntityUpdateException(Movie.class, id, e);
         }
     }
 
@@ -120,7 +118,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
                     .map(MovieDTO::new)
                     .collect(Collectors.toList());
         } catch (Exception e) {
-            throw new DaoException.MovieFindAllException(e);
+            throw new DaoException.EntityFindAllException(Movie.class, e);
         }
     }
 

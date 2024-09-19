@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,9 +44,10 @@ public class MovieDTO {
         this.id = movie.getId();
         this.title = movie.getTitle();
         this.overview = movie.getOverview();
-        this.genres = movie.getGenres() != null ? movie.getGenres().stream()
-                .map(GenreDTO::new)  // Convert Genre entities to GenreDTOs
-                .collect(Collectors.toList()) : null;
+        this.genres = movie.getGenres() != null ?
+                movie.getGenres().stream()
+                .map(GenreDTO::new)
+                .collect(Collectors.toList()) : new ArrayList<>();
         this.originalLanguage = movie.getOriginalLanguage();
         this.releaseDate = movie.getReleaseDate();
         this.voteAverage = movie.getVoteAverage();

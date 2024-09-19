@@ -47,4 +47,7 @@ public class MovieCredits {
         }
     }
 
+    public MovieCredits(MovieCreditsDTO credits) {
+        this.id = credits.getId();
+    }
 }
