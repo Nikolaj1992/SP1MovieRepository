@@ -33,6 +33,9 @@ public class Movie {
     @Column(name = "votes")
     private int voteCount;
 
+    @OneToOne
+    private MovieCredits movieCredits;
+
     @ManyToMany
     @JoinTable(name = "movie_actor")
     private List<Actor> actors;
