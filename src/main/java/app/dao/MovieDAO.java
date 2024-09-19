@@ -11,7 +11,7 @@ import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
-public class MovieDAO {
+public class MovieDAO implements GenericDAO<Movie, Integer> {
 
     ObjectMapper om = new ObjectMapper();
 
@@ -32,8 +32,6 @@ public class MovieDAO {
         return instance;
     }
 
-    // Helt basic, metoderne skal naturligvis opdateres/ændres
-
     public String getAllAsJSON() {
         List<Movie> movies = findAll();
         try {
@@ -43,6 +41,7 @@ public class MovieDAO {
         }
     }
 
+    @Override
     public Movie create(Movie entity) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -54,6 +53,7 @@ public class MovieDAO {
         }
     }
 
+    @Override
     public int delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Movie deletedMovie = em.find(Movie.class, id);
@@ -63,12 +63,13 @@ public class MovieDAO {
             em.getTransaction().begin();
             em.remove(deletedMovie);
             em.getTransaction().commit();
-            return deletedMovie.getId();    // will work once Movie class has annotations
+            return deletedMovie.getId();
         } catch (Exception e) {
             throw new DaoException.MovieDeleteException(id, e);
         }
     }
 
+    @Override
     public Movie find(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Movie movie = em.find(Movie.class, id);
@@ -79,6 +80,7 @@ public class MovieDAO {
         }
     }
 
+    @Override
     public Movie update(Movie entity, Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -90,6 +92,7 @@ public class MovieDAO {
         }
     }
 
+    @Override
     public List<Movie> findAll() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createQuery("select a from Movie a", Movie.class);
