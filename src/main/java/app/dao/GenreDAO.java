@@ -1,11 +1,7 @@
 package app.dao;
 
-import app.entities.Actor;
 import app.entities.Genre;
-import app.entities.Movie;
-import app.entities.dtos.ActorDTO;
 import app.entities.dtos.GenreDTO;
-import app.entities.dtos.MovieDTO;
 import app.exceptions.DaoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;

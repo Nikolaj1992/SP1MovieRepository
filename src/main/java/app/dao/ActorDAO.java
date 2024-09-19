@@ -1,12 +1,8 @@
 package app.dao;
 
 import app.entities.Actor;
-import app.entities.Movie;
 import app.entities.dtos.ActorDTO;
-import app.entities.dtos.MovieDTO;
 import app.exceptions.DaoException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
