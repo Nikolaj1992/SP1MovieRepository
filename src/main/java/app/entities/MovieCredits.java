@@ -31,28 +31,28 @@ public class MovieCredits {
 
     public MovieCredits(MovieCreditsDTO movieCreditsDTO) {
         this.id = movieCreditsDTO.getId();
-//        final Movie movie = new Movie(movieCreditsDTO.getMovie());
-//        this.addMovie(movie);
-        if (this.actors == null && movieCreditsDTO != null) {
-        for (ActorDTO actorDTO : movieCreditsDTO.getCast()) {
-            Actor actor = new Actor(actorDTO);
-            actor.getCredits().add(this);
-            this.actors.add(actor);
-        }
-        }
-        if (this.directors == null && movieCreditsDTO != null) {
-        for (DirectorDTO directorDTO : movieCreditsDTO.getCrew()){
-            Director director = new Director(directorDTO);
-            director.getCredits().add(this);
-            this.directors.add(director);
-        }
+        List<Actor> actorList = movieCreditsDTO.getCast().stream().map(actorDTO -> new Actor(actorDTO)).toList();
+        List<Director> directorList = movieCreditsDTO.getCrew().stream().map(directorDTO -> new Director(directorDTO)).toList();
+        this.addActor(actorList);
+        this.addDirector(directorList);
+    }
+
+    public void addActor(List<Actor> actor) {
+        if (this.actors == null && actor != null) {
+            for (Actor actor1 : actor) {
+                actor1.getCredits().add(this);
+                this.actors.add(actor1);
+            }
         }
     }
 
-//    public void addMovie(Movie movie) {
-//        if (this.movie == null && movie != null) {
-//            this.movie = movie;
-//        }
-//    }
+    public void addDirector(List<Director> director) {
+        if (this.directors == null && director != null) {
+            for (Director director1 : director) {
+                director1.getCredits().add(this);
+                this.directors.add(director1);
+            }
+        }
+    }
 
 }

@@ -19,7 +19,7 @@ import java.util.List;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
     private Integer id;
 
@@ -42,6 +42,7 @@ public class Movie {
     private List<Genre> genres = new ArrayList<>();
 
     public Movie(MovieDTO movieDTO) {
+        this.id = movieDTO.getId();
         this.title = movieDTO.getTitle();
 //        this.overview = movieDTO.getOverview();
         this.originalLanguage = movieDTO.getOriginalLanguage();
@@ -50,15 +51,16 @@ public class Movie {
         this.voteCount = movieDTO.getVoteCount();
         final MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
         this.addMovieCredit(movieCredits);
-        this.addGenres(movieDTO.getGenres()); //think of this as adding a value to this.genres
+        List<Genre> genres = movieDTO.getGenres().stream().map(genreDTO -> new Genre(genreDTO)).toList();
+        this.addGenres(genres); //think of this as adding a value to this.genres
     }
 
-    public void addGenres(List<GenreDTO> genres) {
+    public void addGenres(List<Genre> genres) {
         if (this.genres == null && genres != null) {
-        List<Genre> genreList = new ArrayList<>();
-        genres.forEach(genre -> genreList.add(new Genre(genre)));
-        this.genres = genreList;
-        genreList.forEach(genre -> genre.getMovies().add(this));
+            for (Genre genre : genres) {
+                genre.getMovies().add(this);
+                this.genres.add(genre);
+            }
         }
     }
 

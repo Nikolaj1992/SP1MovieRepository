@@ -24,5 +24,6 @@ public class MovieCreditsDTO { //TODO: change this method to function in a way t
 //    private List<Integer> crewIds;
     private List<DirectorDTO> crew;
 
+    @ToString.Exclude
     private MovieDTO movie;
 }

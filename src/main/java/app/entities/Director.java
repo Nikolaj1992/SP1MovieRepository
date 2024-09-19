@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "movie_director")
+@Table(name = "director")
 @Getter
 @Setter
 @ToString
