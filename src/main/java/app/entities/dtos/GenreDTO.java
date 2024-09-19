@@ -10,13 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DirectorDTO {
-
+public class GenreDTO {
     @JsonProperty("id")
     private int id;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("department") // possibly replace this with "Department"
-    private String department;
-
 }

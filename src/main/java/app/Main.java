@@ -1,31 +1,26 @@
 package app;
 
-import app.api.ApiReader;
+import app.entities.dtos.MovieCreditsDTO;
 import app.entities.dtos.MovieDTO;
-import app.services.MovieService;
-import app.config.HibernateConfig;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
+import app.services.ApiReader;
 
 public class Main {
     public static void main(String[] args) {
 
-        String apiKey = System.getenv("TMDB_API_KEY");
-        String url = "https://api.themoviedb.org/3/movie/💥?api_key=#";
-        String fullUrl = url.replace("#",apiKey);
-        fullUrl = fullUrl.replace("💥","533535");
-        System.out.println(fullUrl);
+        ApiReader apiReader = new ApiReader();
 
-        ApiReader reader = new ApiReader();
-        reader.read(fullUrl);
-
-        System.out.println("-----------==-----------");
-        MovieService movieService = new MovieService(apiKey);
-        MovieDTO movie = movieService.getMovieById(533535);
-        System.out.println(movie);
-
-//        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
-//        EntityManager em = emf.createEntityManager();
+        apiReader.readMovieMultiple();
+//        apiReader.apiMovies.forEach(System.out::println);
+//        apiReader.apiCredits.forEach(System.out::println);
+        System.out.println("Amount of movies: " + apiReader.apiMovies.size());
+        System.out.println("Amount of credits: " + apiReader.apiCredits.size());
+//        apiReader.apiActors.forEach(System.out::println);
+//        apiReader.apiDirectors.forEach(System.out::println);
+        for (MovieDTO apiMovie : apiReader.apiMovies) {
+            if (apiMovie.getId() == 833339){
+                System.out.println(apiMovie);
+            }
+        }
 
     }
 }
