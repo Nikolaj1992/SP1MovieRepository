@@ -28,11 +28,9 @@ public class MovieCredits {
     @ManyToMany
     private List<Director> directors;
 
-    public MovieCredits(MovieCreditsDTO movieCreditsDTO, MovieDTO movieDTO) {
+    public MovieCredits(MovieCreditsDTO movieCreditsDTO) {
         this.id = movieCreditsDTO.getId();
-        Movie movieInput = new Movie(movieDTO);
-        movieInput.setId(this.getId());
-        this.movie = movieInput;
+        this.movie = new Movie(movieCreditsDTO.getMovie());
         for (ActorDTO actorDTO : movieCreditsDTO.getCast()) {
             Actor actor = new Actor(actorDTO);
             actor.getCredits().add(this);

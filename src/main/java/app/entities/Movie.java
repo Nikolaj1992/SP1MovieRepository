@@ -36,14 +36,6 @@ public class Movie {
     @OneToOne
     private MovieCredits movieCredits;
 
-    @ManyToMany
-    @JoinTable(name = "movie_actor")
-    private List<Actor> actors;
-
-    @ManyToMany
-    @JoinTable(name = "movie_director")
-    private List<Director> directors;
-
     // TODO decide how to handle genres
     @ManyToMany(mappedBy = "movies", cascade = CascadeType.PERSIST)
     private List<Genre> genres;
@@ -55,6 +47,7 @@ public class Movie {
         this.releaseDate = movieDTO.getReleaseDate();
         this.voteAverage = movieDTO.getVoteAverage();
         this.voteCount = movieDTO.getVoteCount();
+        this.movieCredits = new MovieCredits(movieDTO.getCredits());
         this.addGenres(movieDTO.getGenres()); //think of this as adding a value to this.genres
     }
 
