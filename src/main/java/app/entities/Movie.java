@@ -35,11 +35,6 @@ public class Movie {
     private int voteCount;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "movie_credits",  // Name of the join table
-            joinColumns = @JoinColumn(name = "movie_id"),  // FK for Movie
-            inverseJoinColumns = @JoinColumn(name = "credits_id")  // FK for MovieCredits
-    )
     private MovieCredits movieCredits;
 
     // TODO decide how to handle genres

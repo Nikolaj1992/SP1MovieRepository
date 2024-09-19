@@ -22,8 +22,7 @@ public class MovieCredits {
     private Integer id;
 
     // TODO: add relations here and stuff
-//    @OneToOne(mappedBy = "movieCredits")
-    @OneToOne
+    @OneToOne(mappedBy = "movieCredits")
     private Movie movie;
     @ManyToMany
     private List<Actor> actors = new ArrayList<>();
