@@ -27,4 +27,12 @@ public class Genre {
         this.id = genre.getId();
         this.name = genre.getName();
     }
+
+    public void addMovie(Movie movie) {
+        if (!this.movies.contains(movie)) {
+            movie.getGenres().add(this);
+            this.movies.add(movie);
+        }
+    }
+
 }

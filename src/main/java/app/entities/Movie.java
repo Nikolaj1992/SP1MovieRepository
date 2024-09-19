@@ -50,7 +50,7 @@ public class Movie {
         this.releaseDate = movieDTO.getReleaseDate();
         this.voteAverage = movieDTO.getVoteAverage();
         this.voteCount = movieDTO.getVoteCount();
-        final MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
+        MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
         this.addMovieCredit(movieCredits);
         List<Genre> genres = movieDTO.getGenres().stream().map(genreDTO -> new Genre(genreDTO)).toList();
         genres.forEach(System.out::println);
@@ -61,10 +61,17 @@ public class Movie {
 
     public void addGenres(List<Genre> genres) {
         if (this.genres == null && genres != null) {
-            for (Genre genre : genres) {
-                genre.getMovies().add(this);
-                this.genres.add(genre);
-            }
+
+            genres.forEach(g -> g.addMovie(this));
+
+//            genres.forEach(genre -> genre.getMovies().add(this));
+//            genres.forEach(this.genres::add);
+
+//            for (Genre genre : genres) {
+//                genre.getMovies().add(this);
+//                this.genres.add(genre);
+//            }
+
         }
     }
 
