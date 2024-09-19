@@ -12,7 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class MovieService {
-
+    // TODO: figure out if this class even needs to exist, as it is an inferior version of ApiReader
     private static final String MOVIE_API_URL = "https://api.themoviedb.org/3/movie/%d?api_key=%s";
     private final String apiKey;
     private final HttpClient client;

@@ -69,6 +69,7 @@ public class ApiReader {
                 MovieDTO movieDTO = readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i)));
                 MovieCreditsDTO creditsDTO = apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i)));
                 movieDTO.setCredits(creditsDTO);
+                creditsDTO.setMovie(movieDTO);
                 apiMovies.add(movieDTO);
                 apiCredits.add(apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
             }
@@ -107,6 +108,7 @@ public class ApiReader {
                     MovieDTO movieDTO = readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i)));
                     MovieCreditsDTO creditsDTO = apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i)));
                     movieDTO.setCredits(creditsDTO);
+                    creditsDTO.setMovie(movieDTO);
                     apiMovies.add(movieDTO);
                     apiCredits.add(apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 }

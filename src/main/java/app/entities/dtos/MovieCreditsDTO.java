@@ -23,4 +23,6 @@ public class MovieCreditsDTO { //TODO: change this method to function in a way t
 //    @JsonDeserialize(using = CrewIdDeserializer.class)
 //    private List<Integer> crewIds;
     private List<DirectorDTO> crew;
+
+    private MovieDTO movie;
 }

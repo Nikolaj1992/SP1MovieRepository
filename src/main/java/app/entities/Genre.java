@@ -4,6 +4,7 @@ import app.entities.dtos.GenreDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,8 +20,8 @@ public class Genre {
 
     private String name;
 
-    @ManyToMany
-    private List<Movie> movies;
+    @ManyToMany(mappedBy = "genres")
+    private List<Movie> movies = new ArrayList<>();
 
     public Genre(GenreDTO genre) {
         this.id = genre.getId();
