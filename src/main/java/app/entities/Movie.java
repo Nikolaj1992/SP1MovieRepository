@@ -14,6 +14,7 @@ import java.util.List;
 @Table(name = "movie")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie {
@@ -52,7 +53,10 @@ public class Movie {
         final MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
         this.addMovieCredit(movieCredits);
         List<Genre> genres = movieDTO.getGenres().stream().map(genreDTO -> new Genre(genreDTO)).toList();
+        genres.forEach(System.out::println);
         this.addGenres(genres); //think of this as adding a value to this.genres
+        System.out.println("-----");
+        genres.forEach(System.out::println);
     }
 
     public void addGenres(List<Genre> genres) {

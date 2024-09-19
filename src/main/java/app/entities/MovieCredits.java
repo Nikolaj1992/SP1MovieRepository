@@ -13,6 +13,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -22,6 +23,7 @@ public class MovieCredits {
     private Integer id;
 
     // TODO: add relations here and stuff
+    @ToString.Exclude
     @OneToOne(mappedBy = "movieCredits")
     private Movie movie;
     @ManyToMany

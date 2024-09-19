@@ -21,16 +21,22 @@ public class Main {
         System.out.println("Amount of credits: " + apiReader.apiCredits.size());
 //        apiReader.apiActors.forEach(System.out::println);
 //        apiReader.apiDirectors.forEach(System.out::println);
+        MovieDTO movieDTO = new MovieDTO();
         for (MovieDTO apiMovie : apiReader.apiMovies) {
             if (apiMovie.getId() == 833339){
+                movieDTO = apiMovie;
                 System.out.println(apiMovie.toString());
+
             }
         }
 
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
+//        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
+//
+//        List<Movie> movies = apiReader.apiMovies.stream().map(movieDTO -> new Movie(movieDTO)).toList();
+//        ApiDAO apiDAO = ApiDAO.getInstance(emf);
+//        apiDAO.persistAll(movies);
 
-        List<Movie> movies = apiReader.apiMovies.stream().map(movieDTO -> new Movie(movieDTO)).toList();
-        ApiDAO apiDAO = ApiDAO.getInstance(emf);
-        apiDAO.persistAll(movies);
+        Movie movie = new Movie(movieDTO);
+        System.out.println(movie.toString());
     }
 }
