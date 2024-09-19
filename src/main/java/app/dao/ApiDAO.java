@@ -15,6 +15,8 @@ public class ApiDAO {
     private static ApiDAO instance;
     private static EntityManagerFactory emf;
 
+    private ApiDAO() {}
+
     public static ApiDAO getInstance(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;

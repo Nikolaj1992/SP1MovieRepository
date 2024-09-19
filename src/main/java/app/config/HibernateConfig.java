@@ -1,8 +1,6 @@
 package app.config;
 
-import app.entities.Actor;
-import app.entities.Director;
-import app.entities.Movie;
+import app.entities.*;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
 import org.hibernate.SessionFactory;
@@ -83,6 +81,8 @@ public class HibernateConfig {
     private static void getAnnotationConfiguration(Configuration configuration) {
         // add annotated classes
         configuration.addAnnotatedClass(Movie.class);
+        configuration.addAnnotatedClass(MovieCredits.class);
+        configuration.addAnnotatedClass(Genre.class);
         configuration.addAnnotatedClass(Actor.class);
         configuration.addAnnotatedClass(Director.class);
     }

@@ -1,8 +1,13 @@
 package app;
 
-import app.entities.dtos.MovieCreditsDTO;
+import app.config.HibernateConfig;
+import app.dao.ApiDAO;
+import app.entities.Movie;
 import app.entities.dtos.MovieDTO;
 import app.services.ApiReader;
+import jakarta.persistence.EntityManagerFactory;
+
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,5 +27,10 @@ public class Main {
             }
         }
 
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
+
+        List<Movie> movies = apiReader.apiMovies.stream().map(movieDTO -> new Movie(movieDTO)).toList();
+        ApiDAO apiDAO = ApiDAO.getInstance(emf);
+        apiDAO.persistAll(movies);
     }
 }
