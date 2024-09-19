@@ -1,5 +1,6 @@
 package app.entities;
 
+import app.entities.dtos.GenreDTO;
 import app.entities.dtos.MovieDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -54,7 +55,7 @@ public class Movie {
         this.addGenres(movieDTO.getGenres()); //think of this as adding a value to this.genres
     }
 
-    public void addGenres(List<MovieDTO.GenreDTO> genres) {
+    public void addGenres(List<GenreDTO> genres) {
         if (this.genres == null) {
         List<Genre> genreList = new ArrayList<>();
         genres.stream().forEach(genre -> genreList.add(new Genre(genre)));

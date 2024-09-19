@@ -1,10 +1,12 @@
 package app.entities;
 
-import app.custom_deserializers.CastIdDeserializer;
-import app.custom_deserializers.CrewIdDeserializer;
+import app.entities.dtos.ActorDTO;
+import app.entities.dtos.DirectorDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.util.List;
@@ -14,14 +16,14 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class MovieCredits { //TODO: change this method to function in a way that lets the illustration from 17/09/2024
-    @JsonProperty("id")
+@Entity
+public class MovieCredits {
+    @Id
     private int id;
-    @JsonProperty("cast")
-    @JsonDeserialize(using = CastIdDeserializer.class)
-    private List<Integer> castIds;
-    @JsonProperty("crew")
-    @JsonDeserialize(using = CrewIdDeserializer.class)
-    private List<Integer> crewIds;
+
+    // TODO: add relations here and stuff
+    @ManyToMany
+    private List<ActorDTO> actors;
+    private List<DirectorDTO> directors;
+
 }

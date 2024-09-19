@@ -15,7 +15,7 @@ import java.util.List;
 public class Director {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY) //this is not needed as we get their id from the api
     private Integer id;
 
     private String name;

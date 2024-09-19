@@ -35,16 +35,5 @@ public class MovieDTO {
     @JsonProperty("vote_count")
     private int voteCount;
 
-    @Getter
-    @Setter
-    @ToString
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class GenreDTO {
-        @JsonProperty("id")
-        private int id;
-        @JsonProperty("name")
-        private String name;
-    }
+    private MovieCreditsDTO credits;
 }

@@ -16,7 +16,7 @@ public class ActorDTO {
     private int id;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("character")
-    private String character;
+//    @JsonProperty("character") // why do we even fetch this?? it's going to cause problem and isn't even on the entity
+//    private String character;
 
 }

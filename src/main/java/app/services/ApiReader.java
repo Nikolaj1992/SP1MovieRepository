@@ -1,9 +1,9 @@
 package app.services;
 
 import app.constants.LinkConstants;
-import app.entities.MovieCredits;
 import app.entities.dtos.ActorDTO;
 import app.entities.dtos.DirectorDTO;
+import app.entities.dtos.MovieCreditsDTO;
 import app.entities.dtos.MovieDTO;
 import app.entities.special_entities.MovieMulti;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,18 +21,17 @@ import java.util.List;
 public class ApiReader {
     ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false).registerModule(new JavaTimeModule());
     final String API_KEY = System.getenv("TMDB_API_KEY");
-    public List<MovieCredits> apiCredits = new ArrayList<>();
+    public List<MovieCreditsDTO> apiCredits = new ArrayList<>();
     public List<MovieDTO> apiMovies = new ArrayList<>();
     public List<ActorDTO> apiActors = new ArrayList<>(); //int because im too lazy to currently remove the deserializers
     public List<DirectorDTO> apiDirectors = new ArrayList<>(); //int because im too lazy to currently remove the deserializers
     // TODO: make classes void methods since the lists are stored on the class instance
 
-    public List<MovieDTO> readMovieMultiple(){
+    public void readMovieMultiple(){
         ApiReader apiReader = new ApiReader();
         String urlMulti = LinkConstants.MOVIE_MULTI_LINK.replace("#",API_KEY);
         urlMulti = urlMulti.replace("!","1");
         MovieMulti movieMulti = null;
-        List<MovieDTO> movies = new ArrayList<>();
         int totalPages = 0;
         if (totalPages == 0) {
             try {
@@ -67,10 +66,10 @@ public class ApiReader {
             }
             System.out.println("Currently on page: 1 out of " + totalPages);
             for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
-//            System.out.println(movieMulti.getMovieIds().get(i));
-                movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-//            System.out.println(apiReader.readCastByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
-                apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
+                MovieDTO movieDTO = readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i)));
+                MovieCreditsDTO creditsDTO = apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i)));
+                movieDTO.setCredits(creditsDTO);
+                apiMovies.add(movieDTO);
                 apiCredits.add(apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
             }
         } if (totalPages > 1) {
@@ -105,8 +104,10 @@ public class ApiReader {
                 }
 
                 for (int i = 0; i < movieMulti.getMovieIds().size(); i++) {
-                    movies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
-                    apiMovies.add(readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i))));
+                    MovieDTO movieDTO = readMovieSingleById(String.valueOf(movieMulti.getMovieIds().get(i)));
+                    MovieCreditsDTO creditsDTO = apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i)));
+                    movieDTO.setCredits(creditsDTO);
+                    apiMovies.add(movieDTO);
                     apiCredits.add(apiReader.readCreditsByMovieId(String.valueOf(movieMulti.getMovieIds().get(i))));
                 }
             }
@@ -114,16 +115,13 @@ public class ApiReader {
         }
 
         //TODO: create ActorDTOs and DirectorDTOs with checks, using yet another method down here
-        for (MovieCredits credit : apiCredits) {
-            credit.getCastIds().forEach(integer -> apiActors.add(new ActorDTO(integer, "placeholder_name", "placeholder_character")));
-            credit.getCrewIds().forEach(integer -> apiDirectors.add(new DirectorDTO(integer, "placeholder_name", "placeholder_job")));
+        for (MovieCreditsDTO credit : apiCredits) {
+            credit.getCast().forEach(actorDTO -> apiActors.add(actorDTO));
+            credit.getCrew().forEach(directorDTO -> apiDirectors.add(directorDTO));
             //once the serializer is detached we can do a check on credit.getCrew().getDepartment(); and then get the ones that says "Directing" or somethin
             // TODO: add these onto movies, they are currently in a huge list that isnt sorted with no connection to a movie
             // TODO: follow up from above, this can be avoided IF we make a lot of requests to get results for a single actor at the time
-            System.out.println("check");
         }
-
-        return movies;
     }
 
     public MovieDTO readMovieSingleById(String id) {
@@ -161,9 +159,9 @@ public class ApiReader {
         return movie;
     }
 
-    public MovieCredits readCreditsByMovieId(String id) { //incomplete method
+    public MovieCreditsDTO readCreditsByMovieId(String id) { //incomplete method
         ApiReader apiReader = new ApiReader();
-        MovieCredits cast = null;
+        MovieCreditsDTO credits = null;
         String urlPeople = LinkConstants.MOVIE_CAST_LINK.replace("#",API_KEY);
         urlPeople = urlPeople.replace("!",id);
         try {
@@ -185,7 +183,7 @@ public class ApiReader {
                 String body = response1.body();
 //                System.out.println(body);
 //                System.out.println("--------------------");
-                cast = apiReader.jsonToCastDtoSingle(body);
+                credits = apiReader.jsonToCastDtoSingle(body);
 //                System.out.println(cast);
             } else {
                 System.out.println("People: GET request failed. Status code: " + response1.statusCode());
@@ -194,7 +192,7 @@ public class ApiReader {
             e.printStackTrace();
         }
 
-        return cast;
+        return credits;
     }
 
     private MovieDTO jsonToDtoSingle(String jsonString){
@@ -214,9 +212,9 @@ public class ApiReader {
         }
     }
 
-    private MovieCredits jsonToCastDtoSingle(String jsonString){
+    private MovieCreditsDTO jsonToCastDtoSingle(String jsonString){
         try {
-            return om.readValue(jsonString, MovieCredits.class);
+            return om.readValue(jsonString, MovieCreditsDTO.class);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
