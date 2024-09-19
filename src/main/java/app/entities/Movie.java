@@ -54,7 +54,7 @@ public class Movie {
     public void addGenres(List<GenreDTO> genres) {
         if (this.genres == null) {
         List<Genre> genreList = new ArrayList<>();
-        genres.stream().forEach(genre -> genreList.add(new Genre(genre)));
+        genres.forEach(genre -> genreList.add(new Genre(genre)));
         this.genres = genreList;
         genreList.forEach(genre -> genre.getMovies().add(this));
         }
