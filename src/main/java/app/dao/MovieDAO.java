@@ -41,6 +41,9 @@ public class MovieDAO implements GenericDAO<Movie, Integer> {
         }
     }
 
+    // TODO dao methods should accept and return DTOs, once we have our entities and DTOs fully done, edit these
+    // TODO an idea could be to use Jons example from the ActivityLogger solution?
+
     @Override
     public Movie create(Movie entity) {
         try (EntityManager em = emf.createEntityManager()) {
