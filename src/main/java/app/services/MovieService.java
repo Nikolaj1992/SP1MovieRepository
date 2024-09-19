@@ -22,7 +22,6 @@ public class MovieService {
         this.apiKey = apiKey;
         this.client = HttpClient.newHttpClient();
         this.om = new ObjectMapper();
-
         this.om.registerModule(new JavaTimeModule());
         this.om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
