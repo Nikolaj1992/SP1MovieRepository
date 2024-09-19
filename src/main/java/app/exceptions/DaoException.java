@@ -1,6 +1,7 @@
 package app.exceptions;
 
 import app.entities.Movie;
+import app.entities.dtos.MovieDTO;
 
 public class DaoException extends RuntimeException {
 
@@ -34,8 +35,8 @@ public class DaoException extends RuntimeException {
     }
 
     public static class MovieCreateException extends DaoException {
-        public MovieCreateException(Movie movie, Throwable cause) {
-            super("Failed to create movie entity " + movie, cause);
+        public MovieCreateException(MovieDTO movieDTO, Throwable cause) {
+            super("Failed to create movie entity " + movieDTO, cause);
         }
     }
 
