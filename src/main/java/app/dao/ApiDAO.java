@@ -1,9 +1,6 @@
 package app.dao;
 
-import app.entities.Actor;
-import app.entities.Director;
-import app.entities.Genre;
-import app.entities.Movie;
+import app.entities.*;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.ArrayList;
@@ -32,29 +29,34 @@ public class ApiDAO {
             List<Actor> actors = new ArrayList<>();
             List<Director> directors = new ArrayList<>();
             for (Movie movie : movies) {
-                em.persist(movie);
-                em.persist(movie.getMovieCredits());
-                for (Genre genre : movie.getGenres()) { // add all genres to a list so copies can be avoided
+                for (Genre genre : movie.getGenres()) {
                     if (!genres.contains(genre)) {
                         genres.add(genre);
-                        em.persist(genre);
                     }
                 }
                 for (Actor actor : movie.getMovieCredits().getActors()) {
                     if (!actors.contains(actor)) {
                         actors.add(actor);
-                        em.persist(actor);
                     }
                 }
                 for (Director director : movie.getMovieCredits().getDirectors()) {
                     if (!directors.contains(director)) {
                         directors.add(director);
-                        em.persist(director);
                     }
                 }
-                genres.forEach(em::persist);
-                actors.forEach(em::persist);
-                directors.forEach(em::persist);
+            }
+
+            genres.forEach(em::persist);
+            actors.forEach(em::persist);
+            directors.forEach(em::persist);
+
+            for (Movie movie : movies) {
+                MovieCredits movieCredits = movie.getMovieCredits();
+                movieCredits.setActors(new ArrayList<>(movieCredits.getActors()));
+                movieCredits.setDirectors(new ArrayList<>(movieCredits.getDirectors()));
+
+                em.persist(movieCredits);
+                em.persist(movie);
             }
             em.getTransaction().commit();
         }

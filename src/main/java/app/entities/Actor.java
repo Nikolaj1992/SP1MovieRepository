@@ -4,6 +4,7 @@ import app.entities.dtos.ActorDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,11 +22,8 @@ public class Actor {
 
     private String name;
 
-    @ManyToMany     // TODO specify additional relation info such as mappedBy or excludes
-    private List<Movie> movies;
-
-    @ManyToMany
-    private List<MovieCredits> credits;
+    @ManyToMany(mappedBy = "actors")
+    private List<MovieCredits> credits = new ArrayList<>();
 
     public Actor(ActorDTO actorDTO) {
         this.id = actorDTO.getId();

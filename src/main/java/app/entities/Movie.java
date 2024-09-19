@@ -14,17 +14,17 @@ import java.util.List;
 @Table(name = "movie")
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "movie_id")
     private Integer id;
 
     private String title;
-    private String overview;
+//    private String overview;
     @Column(name = "original_language")
     private String originalLanguage;
     @Column(name = "release_date")
@@ -34,26 +34,32 @@ public class Movie {
     @Column(name = "votes")
     private int voteCount;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "movie_credits",  // Name of the join table
+            joinColumns = @JoinColumn(name = "movie_id"),  // FK for Movie
+            inverseJoinColumns = @JoinColumn(name = "credits_id")  // FK for MovieCredits
+    )
     private MovieCredits movieCredits;
 
     // TODO decide how to handle genres
-    @ManyToMany(mappedBy = "movies", cascade = CascadeType.PERSIST)
-    private List<Genre> genres;
+    @ManyToMany
+    private List<Genre> genres = new ArrayList<>();
 
     public Movie(MovieDTO movieDTO) {
         this.title = movieDTO.getTitle();
-        this.overview = movieDTO.getOverview();
+//        this.overview = movieDTO.getOverview();
         this.originalLanguage = movieDTO.getOriginalLanguage();
         this.releaseDate = movieDTO.getReleaseDate();
         this.voteAverage = movieDTO.getVoteAverage();
         this.voteCount = movieDTO.getVoteCount();
-        this.addMovieCredit(movieDTO.getCredits());
+        final MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
+        this.addMovieCredit(movieCredits);
         this.addGenres(movieDTO.getGenres()); //think of this as adding a value to this.genres
     }
 
     public void addGenres(List<GenreDTO> genres) {
-        if (this.genres == null) {
+        if (this.genres == null && genres != null) {
         List<Genre> genreList = new ArrayList<>();
         genres.forEach(genre -> genreList.add(new Genre(genre)));
         this.genres = genreList;
@@ -61,9 +67,10 @@ public class Movie {
         }
     }
 
-    public void addMovieCredit(MovieCreditsDTO movieCreditsDTO) {
-        if (this.movieCredits == null) {
-            this.movieCredits = new MovieCredits(movieCreditsDTO);
+    public void addMovieCredit(MovieCredits movieCredits) {
+        if (this.movieCredits == null && movieCredits != null) {
+            this.movieCredits = movieCredits;
+            this.movieCredits.setMovie(this);
         }
     }
 

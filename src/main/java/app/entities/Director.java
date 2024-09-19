@@ -4,6 +4,7 @@ import app.entities.dtos.DirectorDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,11 +23,8 @@ public class Director {
     private String name;
     private String department;
 
-    @ManyToMany
-    private List<Movie> movies;
-
-    @ManyToMany
-    private List<MovieCredits> credits;
+    @ManyToMany(mappedBy = "directors")
+    private List<MovieCredits> credits = new ArrayList<>();
 
     public Director(DirectorDTO directorDTO){
         this.id = directorDTO.getId();
