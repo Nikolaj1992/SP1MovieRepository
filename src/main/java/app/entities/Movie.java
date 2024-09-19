@@ -1,6 +1,7 @@
 package app.entities;
 
 import app.entities.dtos.GenreDTO;
+import app.entities.dtos.MovieCreditsDTO;
 import app.entities.dtos.MovieDTO;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,7 +48,7 @@ public class Movie {
         this.releaseDate = movieDTO.getReleaseDate();
         this.voteAverage = movieDTO.getVoteAverage();
         this.voteCount = movieDTO.getVoteCount();
-        this.movieCredits = new MovieCredits(movieDTO.getCredits());
+        this.addMovieCredit(movieDTO.getCredits());
         this.addGenres(movieDTO.getGenres()); //think of this as adding a value to this.genres
     }
 
@@ -57,6 +58,12 @@ public class Movie {
         genres.forEach(genre -> genreList.add(new Genre(genre)));
         this.genres = genreList;
         genreList.forEach(genre -> genre.getMovies().add(this));
+        }
+    }
+
+    public void addMovieCredit(MovieCreditsDTO movieCreditsDTO) {
+        if (this.movieCredits == null) {
+            this.movieCredits = new MovieCredits(movieCreditsDTO);
         }
     }
 

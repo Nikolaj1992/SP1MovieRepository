@@ -30,7 +30,7 @@ public class MovieCredits {
 
     public MovieCredits(MovieCreditsDTO movieCreditsDTO) {
         this.id = movieCreditsDTO.getId();
-        this.movie = new Movie(movieCreditsDTO.getMovie());
+        this.addMovie(movieCreditsDTO.getMovie());
         for (ActorDTO actorDTO : movieCreditsDTO.getCast()) {
             Actor actor = new Actor(actorDTO);
             actor.getCredits().add(this);
@@ -42,6 +42,12 @@ public class MovieCredits {
             director.getCredits().add(this);
             director.getMovies().add(this.movie);
             this.directors.add(director);
+        }
+    }
+
+    public void addMovie(MovieDTO movieDTO) {
+        if (this.movie == null) {
+            this.movie = new Movie(movieDTO);
         }
     }
 
