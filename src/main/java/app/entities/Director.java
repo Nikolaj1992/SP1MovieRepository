@@ -1,5 +1,6 @@
 package app.entities;
 
+import app.entities.dtos.DirectorDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,9 +20,18 @@ public class Director {
     private Integer id;
 
     private String name;
-    private String job;
+    private String department;
 
     @ManyToMany
     private List<Movie> movies;
+
+    @ManyToMany
+    private List<MovieCredits> credits;
+
+    public Director(DirectorDTO directorDTO){
+        this.id = directorDTO.getId();
+        this.name = directorDTO.getName();
+        this.department = directorDTO.getDepartment();
+    }
 
 }
