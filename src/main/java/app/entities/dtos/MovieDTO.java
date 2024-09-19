@@ -1,13 +1,16 @@
 package app.entities.dtos;
 
 import app.custom_deserializers.GenreNameDeserializer;
+import app.entities.Movie;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -36,4 +39,19 @@ public class MovieDTO {
     private int voteCount;
 
     private MovieCreditsDTO credits;
+
+    public MovieDTO(Movie movie) {
+        this.id = movie.getId();
+        this.title = movie.getTitle();
+        this.overview = movie.getOverview();
+        this.genres = movie.getGenres() != null ?
+                movie.getGenres().stream()
+                .map(GenreDTO::new)
+                .collect(Collectors.toList()) : new ArrayList<>();
+        this.originalLanguage = movie.getOriginalLanguage();
+        this.releaseDate = movie.getReleaseDate();
+        this.voteAverage = movie.getVoteAverage();
+        this.voteCount = movie.getVoteCount();
+    }
+
 }

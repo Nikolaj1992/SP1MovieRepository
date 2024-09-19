@@ -49,10 +49,16 @@ public class MovieCredits {
         }
     }
 
+
+    public MovieCredits(MovieCreditsDTO credits) {
+        this.id = credits.getId();
+    }
+  
 //    public void addMovie(Movie movie) {
 //        if (this.movie == null && movie != null) {
 //            this.movie = movie;
 //        }
 //    }
+
 
 }

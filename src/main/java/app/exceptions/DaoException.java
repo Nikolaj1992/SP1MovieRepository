@@ -1,10 +1,7 @@
 package app.exceptions;
 
-import app.entities.Movie;
 
 public class DaoException extends RuntimeException {
-
-    // TODO improve these exceptions as project progresses
 
     public DaoException(String message) {
         super(message);
@@ -14,34 +11,35 @@ public class DaoException extends RuntimeException {
         super(message, cause);
     }
 
+    // Generalized so they can apply to multiple DAOs
     // Nested static classes, without access to one another
-    public static class MovieNotFoundException extends DaoException {
-        public MovieNotFoundException(Integer id) {
-            super("Movie with ID " + id + " not found");
+    public static class EntityNotFoundException extends DaoException {
+        public EntityNotFoundException(Class<?> entityClass, Object id) {
+            super(entityClass.getSimpleName() + " with ID " + id + " not found");
         }
     }
 
-    public static class MovieDeleteException extends DaoException {
-        public MovieDeleteException(Integer id, Throwable cause) {
-            super("Failed to delete movie with ID " + id, cause);
+    public static class EntityDeleteException extends DaoException {
+        public EntityDeleteException(Class<?> entityClass, Integer id, Throwable cause) {
+            super("Failed to delete " + entityClass.getSimpleName() + " with ID " + id, cause);
         }
     }
 
-    public static class MovieUpdateException extends DaoException {
-        public MovieUpdateException(Integer id, Throwable cause) {
-            super("Failed to update movie with ID " + id, cause);
+    public static class EntityUpdateException extends DaoException {
+        public EntityUpdateException(Class<?> entityClass, Integer id, Throwable cause) {
+            super("Failed to update " + entityClass.getSimpleName() + " with ID " + id, cause);
         }
     }
 
-    public static class MovieCreateException extends DaoException {
-        public MovieCreateException(Movie movie, Throwable cause) {
-            super("Failed to create movie entity " + movie, cause);
+    public static class EntityCreateException extends DaoException {
+        public EntityCreateException(Class<?> entityClass, Throwable cause) {
+            super("Failed to create " + entityClass.getSimpleName() + " entity", cause);
         }
     }
 
-    public static class MovieFindAllException extends DaoException {
-        public MovieFindAllException(Throwable cause) {
-            super("Failed to find all movies from database", cause);
+    public static class EntityFindAllException extends DaoException {
+        public EntityFindAllException(Class<?> entityClass, Throwable cause) {
+            super("Failed to find all " + entityClass.getSimpleName() + " entities", cause);
         }
     }
 
