@@ -25,7 +25,7 @@ public class ApiDAO {
     public void persistAll(List<Movie> movies) {
         try(var em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            if ( em.find(Movie.class, movies.get(0).getId()) != null ) { //should just check if the database has data
+            if ( em.find(Movie.class, movies.get(0).getId()) == null ) { //should just check if the database has data
             for (Movie movie : movies) {
                 List<Genre> genres = new ArrayList<>();
                 List<Actor> actors = new ArrayList<>();
@@ -62,8 +62,12 @@ public class ApiDAO {
                 em.persist(movieCredits);
                 em.persist(movie);
             }
-            } //end of the query check
             em.getTransaction().commit();
+            System.out.println("ApiDAO: saved data to database");
+            } //end of the query check
+            else {
+            System.out.println("ApiDAO: database already contains data");
+            }
         }
     }
 
