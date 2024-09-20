@@ -4,6 +4,10 @@ import app.config.HibernateConfig;
 import app.dao.ApiDAO;
 import app.dao.MovieDAO;
 import app.entities.Movie;
+import app.entities.dtos.ActorDTO;
+import app.entities.dtos.MovieDTO;
+import app.services.ApiReader;
+import app.services.MultiService;
 import app.services.MovieService;
 import app.services.api.ApiReader;
 import jakarta.persistence.EntityManagerFactory;
@@ -35,6 +39,14 @@ public class Main {
         ApiDAO apiDAO = ApiDAO.getInstance(emf);
         apiDAO.persistAll(movies);
 
+        // It works nicely
+        MultiService multiService = MultiService.getInstance(emf);
+
+        ActorDTO newActor = new ActorDTO();
+        newActor.setName("Anthony Hopkins");
+        multiService.createInDB(newActor);
+
+      
         MovieDAO movieDAO = MovieDAO.getInstance(emf);
         MovieService movieService = new MovieService(movieDAO);
         movieService.getHigestRatedMovies(10).forEach(movieDTO -> System.out.println("Highest: " + movieDTO.getTitle() + " - " + movieDTO.getVoteAverage()));
