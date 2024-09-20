@@ -1,4 +1,4 @@
-package app.services;
+package app.services.api;
 
 import app.constants.LinkConstants;
 import app.entities.dtos.ActorDTO;
