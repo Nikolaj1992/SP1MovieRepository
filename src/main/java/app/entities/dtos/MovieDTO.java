@@ -41,7 +41,6 @@ public class MovieDTO {
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
         this.title = movie.getTitle();
-        this.overview = movie.getOverview();
         this.genres = movie.getGenres() != null ?
                 movie.getGenres().stream()
                 .map(GenreDTO::new)
