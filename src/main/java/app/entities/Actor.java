@@ -22,6 +22,7 @@ public class Actor {
 
     private String name;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "actors")
     private List<MovieCredits> credits = new ArrayList<>();
 

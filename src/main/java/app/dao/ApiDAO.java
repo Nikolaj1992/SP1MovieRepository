@@ -44,16 +44,18 @@ public class ApiDAO {
 //                    genre.add  my brain gave up
                 }
                 for (Actor actor : movie.getMovieCredits().getActors()) {
-                    if (!actors.contains(actor)) {
-                        actors.add(actor);
+                    Actor existingActor = em.find(Actor.class, actor.getId());
+                    if (existingActor == null) {
                         em.persist(actor);
                     }
+                    actors.add(actor);
                 }
                 for (Director director : movie.getMovieCredits().getDirectors()) {
-                    if (!directors.contains(director)) {
-                        directors.add(director);
+                    Director existingDirector = em.find(Director.class, director.getId());
+                    if (existingDirector == null) {
                         em.persist(director);
                     }
+                    directors.add(director);
                 }
                 movieCredits.setActors(new ArrayList<>(actors));
                 movieCredits.setDirectors(new ArrayList<>(directors));

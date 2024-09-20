@@ -23,6 +23,7 @@ public class Director {
     private String name;
     private String department;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "directors")
     private List<MovieCredits> credits = new ArrayList<>();
 

@@ -26,8 +26,10 @@ public class MovieCredits {
     @ToString.Exclude
     @OneToOne(mappedBy = "movieCredits")
     private Movie movie;
+    @ToString.Exclude
     @ManyToMany
     private List<Actor> actors = new ArrayList<>();
+    @ToString.Exclude
     @ManyToMany
     private List<Director> directors = new ArrayList<>();
 
@@ -41,7 +43,7 @@ public class MovieCredits {
 
     public void addActor(List<Actor> actor) {
         if (this.actors != null && !actor.isEmpty()) {
-            for (Actor actor1 : actors) {
+            for (Actor actor1 : actor) {
                 actor1.getCredits().add(this);
                 this.actors.add(actor1);
             }
@@ -50,7 +52,7 @@ public class MovieCredits {
 
     public void addDirector(List<Director> director) {
         if (this.directors != null && !director.isEmpty()) {
-            for (Director director1 : directors) {
+            for (Director director1 : director) {
                 director1.getCredits().add(this);
                 this.directors.add(director1);
             }

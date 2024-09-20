@@ -35,6 +35,7 @@ public class Movie {
     @Column(name = "votes")
     private int voteCount;
 
+    @ToString.Exclude
     @OneToOne(cascade = CascadeType.PERSIST)
     private MovieCredits movieCredits;
 
