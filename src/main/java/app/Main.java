@@ -40,5 +40,6 @@ public class Main {
         movieService.getHigestRatedMovies(10).forEach(movieDTO -> System.out.println("Highest: " + movieDTO.getTitle() + " - " + movieDTO.getVoteAverage()));
         movieService.getLowestRatedMovies(10).forEach(movieDTO -> System.out.println("Lowest: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()));
         movieService.getMostPopularMovies(10).forEach(movieDTO -> System.out.println("Popular: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()+ " - " +  movieDTO.getVoteCount()));
+        movieService.searchForMovieByTitle("for").forEach(movieDTO -> {System.out.println(movieDTO.getTitle());});
     }
 }
