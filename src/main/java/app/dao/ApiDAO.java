@@ -35,13 +35,11 @@ public class ApiDAO {
                 for (Genre genre : movie.getGenres()) {
                     Genre existingGenre = em.find(Genre.class, genre.getId());
                     if (existingGenre == null) {
-//                        genre.addMovie(movie);
                         em.persist(genre);
                         genres.add(genre);
                     } else {
                         genres.add(existingGenre);
                     }
-//                    genre.add  my brain gave up
                 }
                 for (Actor actor : movie.getMovieCredits().getActors()) {
                     Actor existingActor = em.find(Actor.class, actor.getId());
@@ -64,11 +62,6 @@ public class ApiDAO {
                 em.persist(movieCredits);
                 em.persist(movie);
             }
-
-//            genres.forEach(em::persist);
-//            actors.forEach(em::persist);
-//            directors.forEach(em::persist);
-
             em.getTransaction().commit();
         }
     }

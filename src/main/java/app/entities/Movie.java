@@ -63,18 +63,8 @@ public class Movie {
 
     public void addGenres(List<Genre> genres) {
         if (this.genres != null && !genres.isEmpty()) {     // before it skipped adding genres if the list was initialized
-
             genres.forEach(g -> g.addMovie(this));
             this.genres.addAll(genres);
-
-//            genres.forEach(genre -> genre.getMovies().add(this));
-//            genres.forEach(this.genres::add);
-
-//            for (Genre genre : genres) {
-//                genre.getMovies().add(this);
-//                this.genres.add(genre);
-//            }
-
         }
     }
 
