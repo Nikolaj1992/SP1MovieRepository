@@ -3,8 +3,10 @@ package app;
 import app.config.HibernateConfig;
 import app.dao.ApiDAO;
 import app.entities.Movie;
+import app.entities.dtos.ActorDTO;
 import app.entities.dtos.MovieDTO;
 import app.services.ApiReader;
+import app.services.MultiService;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
@@ -33,5 +35,12 @@ public class Main {
         List<Movie> movies = apiReader.apiMovies.stream().map(mDTO -> new Movie(mDTO)).toList();
         ApiDAO apiDAO = ApiDAO.getInstance(emf);
         apiDAO.persistAll(movies);
+
+        // It works nicely
+        MultiService multiService = MultiService.getInstance(emf);
+
+        ActorDTO newActor = new ActorDTO();
+        newActor.setName("Anthony Hopkins");
+        multiService.createInDB(newActor);
     }
 }

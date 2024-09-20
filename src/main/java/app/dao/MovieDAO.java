@@ -92,7 +92,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
                 throw new DaoException.EntityNotFoundException(Movie.class, id);
             }
             movie.setTitle(mDto.getTitle());
-            movie.setOverview(mDto.getOverview());
+//            movie.setOverview(mDto.getOverview());
             movie.setOriginalLanguage(mDto.getOriginalLanguage());
             movie.setReleaseDate(mDto.getReleaseDate());
             movie.setVoteAverage(mDto.getVoteAverage());
