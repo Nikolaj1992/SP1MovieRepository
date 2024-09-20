@@ -2,10 +2,13 @@ package app.services;
 
 import app.dao.*;
 import app.entities.dtos.*;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
 public class MultiService {
+
+    private static MultiService instance;
 
     private ActorDAO actorDAO;
     private DirectorDAO directorDAO;
@@ -13,13 +16,19 @@ public class MultiService {
     private MovieDAO movieDAO;
     private MovieCreditsDAO movieCreditsDAO;
 
-    public MultiService(ActorDAO actorDAO, DirectorDAO directorDAO, GenreDAO genreDAO,
-                        MovieDAO movieDAO, MovieCreditsDAO movieCreditsDAO) {
-        this.actorDAO = actorDAO;
-        this.directorDAO = directorDAO;
-        this.genreDAO = genreDAO;
-        this.movieDAO = movieDAO;
-        this.movieCreditsDAO = movieCreditsDAO;
+    private MultiService(EntityManagerFactory emf) {
+        this.actorDAO = ActorDAO.getInstance(emf);
+        this.directorDAO = DirectorDAO.getInstance(emf);
+        this.genreDAO = GenreDAO.getInstance(emf);
+        this.movieDAO = MovieDAO.getInstance(emf);
+        this.movieCreditsDAO = MovieCreditsDAO.getInstance(emf);
+    }
+
+    public static MultiService getInstance(EntityManagerFactory emf) {
+        if (instance == null) {
+            instance = new MultiService(emf);
+        }
+        return instance;
     }
 
     // Similar to generics, with type casting - T = Data type, D = identifier
