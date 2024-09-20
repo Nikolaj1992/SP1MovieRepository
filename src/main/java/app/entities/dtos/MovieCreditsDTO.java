@@ -1,10 +1,13 @@
 package app.entities.dtos;
 
+import app.entities.MovieCredits;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,6 +27,21 @@ public class MovieCreditsDTO { //TODO: change this method to function in a way t
 //    private List<Integer> crewIds;
     private List<DirectorDTO> crew;
 
+
     @ToString.Exclude
-    private MovieDTO movie;
+  private MovieDTO movie;
+
+    public MovieCreditsDTO(MovieCredits credits) {
+        this.id = credits.getId();
+        this.cast = credits.getActors() != null ?
+                credits.getActors().stream()
+                .map(ActorDTO::new)
+                .collect(Collectors.toList()) : new ArrayList<>();
+        this.crew = credits.getDirectors() != null ?
+                credits.getDirectors().stream()
+                .map(DirectorDTO::new)
+                .collect(Collectors.toList()) : new ArrayList<>();
+    }
+
+
 }

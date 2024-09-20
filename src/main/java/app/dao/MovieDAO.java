@@ -10,8 +10,9 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class MovieDAO implements GenericDAO<Movie, Integer> {
+public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
 
     ObjectMapper om = new ObjectMapper();
 
@@ -32,8 +33,9 @@ public class MovieDAO implements GenericDAO<Movie, Integer> {
         return instance;
     }
 
+    // A little experimental, not yet included elsewhere
     public String getAllAsJSON() {
-        List<Movie> movies = findAll();
+        List<MovieDTO> movies = findAll();
         try {
             return om.writeValueAsString(movies);
         } catch (Exception e) {
@@ -41,18 +43,16 @@ public class MovieDAO implements GenericDAO<Movie, Integer> {
         }
     }
 
-    // TODO dao methods should accept and return DTOs, once we have our entities and DTOs fully done, edit these
-    // TODO an idea could be to use Jons example from the ActivityLogger solution?
-
     @Override
-    public Movie create(Movie entity) {
+    public MovieDTO create(MovieDTO mDto) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            em.persist(entity);
+            Movie movie = new Movie(mDto);
+            em.persist(movie);
             em.getTransaction().commit();
-            return entity;
+            return mDto;
         } catch (Exception e) {
-            throw new DaoException.MovieCreateException(entity, e);
+            throw new DaoException.EntityCreateException(Movie.class, e);
         }
     }
 
@@ -61,47 +61,64 @@ public class MovieDAO implements GenericDAO<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             Movie deletedMovie = em.find(Movie.class, id);
             if (deletedMovie == null) {
-                throw new DaoException.MovieNotFoundException(id);
+                throw new DaoException.EntityNotFoundException(Movie.class, id);
             }
             em.getTransaction().begin();
             em.remove(deletedMovie);
             em.getTransaction().commit();
             return deletedMovie.getId();
         } catch (Exception e) {
-            throw new DaoException.MovieDeleteException(id, e);
+            throw new DaoException.EntityDeleteException(Movie.class, id, e);
         }
     }
 
     @Override
-    public Movie find(Integer id) {
+    public MovieDTO find(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Movie movie = em.find(Movie.class, id);
             if (movie == null) {
-                throw new DaoException.MovieNotFoundException(id);
+                throw new DaoException.EntityNotFoundException(Movie.class, id);
             }
-            return movie;
+            return new MovieDTO(movie);
         }
     }
 
     @Override
-    public Movie update(Movie entity, Integer id) {
+    public MovieDTO update(MovieDTO mDto, Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            Movie updatedMovie = em.merge(entity);
+            Movie movie = em.find(Movie.class, id);
+            if (movie == null) {
+                throw new DaoException.EntityNotFoundException(Movie.class, id);
+            }
+            movie.setTitle(mDto.getTitle());
+            movie.setOverview(mDto.getOverview());
+            movie.setOriginalLanguage(mDto.getOriginalLanguage());
+            movie.setReleaseDate(mDto.getReleaseDate());
+            movie.setVoteAverage(mDto.getVoteAverage());
+            movie.setVoteCount(mDto.getVoteCount());
+
+            // Potentially, we could implement if statements to update genres, actor and directors here too
+
+            Movie updatedMovie = em.merge(movie);
             em.getTransaction().commit();
-            return updatedMovie;
+
+            return new MovieDTO(updatedMovie);
         } catch (Exception e) {
-            throw new DaoException.MovieUpdateException(id, e);
+            throw new DaoException.EntityUpdateException(Movie.class, id, e);
         }
     }
 
     @Override
-    public List<Movie> findAll() {
+    public List<MovieDTO> findAll() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createQuery("select a from Movie a", Movie.class);
-            return query.getResultList();
+            List<Movie> movies = query.getResultList();
+            return movies.stream()
+                    .map(MovieDTO::new)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
-            throw new DaoException.MovieFindAllException(e);
+            throw new DaoException.EntityFindAllException(Movie.class, e);
         }
     }
 

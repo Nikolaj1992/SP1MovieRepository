@@ -1,5 +1,6 @@
 package app.entities.dtos;
 
+import app.entities.Director;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -19,4 +20,9 @@ public class DirectorDTO {
     @JsonProperty("department") // possibly replace this with "Department"
     private String department;
 
+    public DirectorDTO(Director director) {
+        this.id = director.getId();
+        this.name = director.getName();
+        this.department = director.getDepartment();
+    }
 }
