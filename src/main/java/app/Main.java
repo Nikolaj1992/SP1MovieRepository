@@ -6,7 +6,6 @@ import app.dao.MovieDAO;
 import app.entities.Movie;
 import app.entities.dtos.ActorDTO;
 import app.entities.dtos.MovieDTO;
-import app.services.ApiReader;
 import app.services.MultiService;
 import app.services.MovieService;
 import app.services.api.ApiReader;
