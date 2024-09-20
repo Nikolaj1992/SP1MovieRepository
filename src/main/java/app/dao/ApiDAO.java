@@ -47,15 +47,17 @@ public class ApiDAO {
                     Actor existingActor = em.find(Actor.class, actor.getId());
                     if (existingActor == null) {
                         em.persist(actor);
+                        actors.add(actor);
                     }
-                    actors.add(actor);
+                    actors.add(existingActor);
                 }
                 for (Director director : movie.getMovieCredits().getDirectors()) {
                     Director existingDirector = em.find(Director.class, director.getId());
                     if (existingDirector == null) {
                         em.persist(director);
+                        directors.add(director);
                     }
-                    directors.add(director);
+                    directors.add(existingDirector);
                 }
                 movieCredits.setActors(new ArrayList<>(actors));
                 movieCredits.setDirectors(new ArrayList<>(directors));
