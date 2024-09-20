@@ -30,11 +30,13 @@ public class Main {
             }
         }
 
-//        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
-//
-//        List<Movie> movies = apiReader.apiMovies.stream().map(movieDTO -> new Movie(movieDTO)).toList();
-//        ApiDAO apiDAO = ApiDAO.getInstance(emf);
-//        apiDAO.persistAll(movies);
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
+
+        List<Movie> movies = apiReader.apiMovies.stream().map(mDTO -> new Movie(mDTO)).toList();
+        ApiDAO apiDAO = ApiDAO.getInstance(emf);
+        apiDAO.persistAll(movies);
+
+        // TODO: fix conversion between dto to entity for actor, director and genre
 
         Movie movie = new Movie(movieDTO);
         System.out.println(movie.toString());
