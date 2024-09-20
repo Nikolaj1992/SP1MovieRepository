@@ -3,8 +3,7 @@ package app;
 import app.config.HibernateConfig;
 import app.dao.ApiDAO;
 import app.entities.Movie;
-import app.entities.dtos.MovieDTO;
-import app.services.ApiReader;
+import app.services.api.ApiReader;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
