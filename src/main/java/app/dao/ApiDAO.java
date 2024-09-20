@@ -33,9 +33,13 @@ public class ApiDAO {
                 MovieCredits movieCredits = movie.getMovieCredits();
 
                 for (Genre genre : movie.getGenres()) {
-                    if (!genres.contains(genre)) {
-                        genres.add(genre);
+                    Genre existingGenre = em.find(Genre.class, genre.getId());
+                    if (existingGenre == null) {
+//                        genre.addMovie(movie);
                         em.persist(genre);
+                        genres.add(genre);
+                    } else {
+                        genres.add(existingGenre);
                     }
 //                    genre.add  my brain gave up
                 }

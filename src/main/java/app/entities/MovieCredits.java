@@ -40,8 +40,8 @@ public class MovieCredits {
     }
 
     public void addActor(List<Actor> actor) {
-        if (this.actors == null && actor != null) {
-            for (Actor actor1 : actor) {
+        if (this.actors != null && !actor.isEmpty()) {
+            for (Actor actor1 : actors) {
                 actor1.getCredits().add(this);
                 this.actors.add(actor1);
             }
@@ -49,8 +49,8 @@ public class MovieCredits {
     }
 
     public void addDirector(List<Director> director) {
-        if (this.directors == null && director != null) {
-            for (Director director1 : director) {
+        if (this.directors != null && !director.isEmpty()) {
+            for (Director director1 : directors) {
                 director1.getCredits().add(this);
                 this.directors.add(director1);
             }

@@ -20,6 +20,7 @@ public class Genre {
 
     private String name;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "genres")
     private List<Movie> movies = new ArrayList<>();
 
