@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "genres")
+@Table(name = "genre")
 @Getter
 @Setter
 @ToString
@@ -20,6 +20,7 @@ public class Genre {
 
     private String name;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "genres")
     private List<Movie> movies = new ArrayList<>();
 
@@ -27,4 +28,12 @@ public class Genre {
         this.id = genre.getId();
         this.name = genre.getName();
     }
+
+    public void addMovie(Movie movie) {
+        if (!this.movies.contains(movie)) {
+            movie.getGenres().add(this);
+            this.movies.add(movie);
+        }
+    }
+
 }

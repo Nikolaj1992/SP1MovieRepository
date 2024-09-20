@@ -56,7 +56,7 @@ public class ApiReader {
                     movieMulti = apiReader.jsonToDtoMulti(body);
 //                System.out.println(movieMulti);
 //                    totalPages = movieMulti.getTotalPages();
-                    totalPages = 3;
+                    totalPages = 1;
                     System.out.println("Total Pages: " + totalPages);
                 } else {
                     System.out.println("Multi: GET request failed. Status code: " + response1.statusCode());

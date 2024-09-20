@@ -14,12 +14,13 @@ import java.util.List;
 @Table(name = "movie")
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movie_id")
     private Integer id;
 
@@ -34,31 +35,33 @@ public class Movie {
     @Column(name = "votes")
     private int voteCount;
 
+    @ToString.Exclude
     @OneToOne(cascade = CascadeType.PERSIST)
     private MovieCredits movieCredits;
 
     // TODO decide how to handle genres
+    @ToString.Exclude
     @ManyToMany
     private List<Genre> genres = new ArrayList<>();
 
     public Movie(MovieDTO movieDTO) {
+        this.id = movieDTO.getId();
         this.title = movieDTO.getTitle();
 //        this.overview = movieDTO.getOverview();
         this.originalLanguage = movieDTO.getOriginalLanguage();
         this.releaseDate = movieDTO.getReleaseDate();
         this.voteAverage = movieDTO.getVoteAverage();
         this.voteCount = movieDTO.getVoteCount();
-        final MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
+        MovieCredits movieCredits = new MovieCredits(movieDTO.getCredits());
         this.addMovieCredit(movieCredits);
-        this.addGenres(movieDTO.getGenres()); //think of this as adding a value to this.genres
+        List<Genre> genres = movieDTO.getGenres().stream().map(genreDTO -> new Genre(genreDTO)).toList();
+        this.addGenres(genres); //think of this as adding a value to this.genres
     }
 
-    public void addGenres(List<GenreDTO> genres) {
-        if (this.genres == null && genres != null) {
-        List<Genre> genreList = new ArrayList<>();
-        genres.forEach(genre -> genreList.add(new Genre(genre)));
-        this.genres = genreList;
-        genreList.forEach(genre -> genre.getMovies().add(this));
+    public void addGenres(List<Genre> genres) {
+        if (this.genres != null && !genres.isEmpty()) {     // before it skipped adding genres if the list was initialized
+            genres.forEach(g -> g.addMovie(this));
+            this.genres.addAll(genres);
         }
     }
 

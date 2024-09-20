@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "movie_director")
+@Table(name = "director")
 @Getter
 @Setter
 @ToString
@@ -23,6 +23,7 @@ public class Director {
     private String name;
     private String department;
 
+    @ToString.Exclude
     @ManyToMany(mappedBy = "directors")
     private List<MovieCredits> credits = new ArrayList<>();
 
