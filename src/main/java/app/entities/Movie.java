@@ -25,7 +25,6 @@ public class Movie {
     private Integer id;
 
     private String title;
-//    private String overview;
     @Column(name = "original_language")
     private String originalLanguage;
     @Column(name = "release_date")

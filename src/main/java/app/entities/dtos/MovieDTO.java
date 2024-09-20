@@ -23,8 +23,6 @@ public class MovieDTO {
     private int id;
     @JsonProperty("original_title")
     private String title;
-    @JsonProperty("overview")
-    private String overview;
     @JsonProperty("genres")
 //    @JsonDeserialize(using = GenreNameDeserializer.class)
 //    private List<String> genres;
