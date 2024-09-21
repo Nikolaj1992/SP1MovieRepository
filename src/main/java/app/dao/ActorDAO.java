@@ -1,13 +1,18 @@
 package app.dao;
 
 import app.entities.Actor;
+import app.entities.MovieCredits;
 import app.entities.dtos.ActorDTO;
+import app.entities.dtos.MovieDTO;
 import app.exceptions.DaoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ActorDAO implements GenericDAO<ActorDTO, Integer> {
@@ -97,6 +102,30 @@ public class ActorDAO implements GenericDAO<ActorDTO, Integer> {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             throw new DaoException.EntityFindAllException(Actor.class, e);
+        }
+    }
+
+    public Map<String, Object> moviesByActorId(Integer id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "select a from Actor  a join fetch a.credits c join fetch c.movie m where a.id = :actorId";
+
+            Actor actor = em.createQuery(jpql, Actor.class)
+                    .setParameter("actorId", id)
+                    .getSingleResult();
+            if (actor != null) {
+                List<MovieDTO> movieDTOS = actor.getCredits()
+                        .stream()
+                        .map(MovieCredits::getMovie)
+                        .map(MovieDTO::new)
+                        .collect(Collectors.toList());
+
+                Map<String, Object> result = new HashMap<>();
+                result.put("actorName", actor.getName());
+                result.put("movies", movieDTOS);
+
+                return result;
+            }
+            return Collections.emptyMap();
         }
     }
 
