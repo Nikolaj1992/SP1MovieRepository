@@ -4,6 +4,7 @@ import app.dao.DirectorDAO;
 import app.entities.dtos.DirectorDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public class DirectorService {
 
@@ -32,5 +33,10 @@ public class DirectorService {
     public List<DirectorDTO> findAllDirectors() {
         return directorDAO.findAll();
     }
+
+    public Map<String, Object> findMoviesByDirectorId(Integer id) {
+        return directorDAO.moviesByDirectorId(id);
+    }
+
 
 }

@@ -3,11 +3,13 @@ package app;
 import app.config.HibernateConfig;
 import app.dao.ActorDAO;
 import app.dao.ApiDAO;
+import app.dao.DirectorDAO;
 import app.dao.MovieDAO;
 import app.entities.Movie;
 import app.entities.dtos.ActorDTO;
 import app.entities.dtos.MovieDTO;
 import app.services.ActorService;
+import app.services.DirectorService;
 import app.services.MultiService;
 import app.services.MovieService;
 import app.services.api.ApiReader;
@@ -56,9 +58,11 @@ public class Main {
 //        movieService.getMostPopularMovies(10).forEach(movieDTO -> System.out.println("Popular: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()+ " - " +  movieDTO.getVoteCount()));
 //        movieService.searchForMovieByTitle("for").forEach(movieDTO -> {System.out.println(movieDTO.getTitle());});
 
-        // Finding movies by actor - maybe somewhat convoluted. Could be improved with controllers
+        // Finding movies by actor/director - maybe somewhat convoluted. Could be improved with controllers
         ActorDAO actorDAO = ActorDAO.getInstance(emf);
+        DirectorDAO directorDAO = DirectorDAO.getInstance(emf);
         ActorService actorService = new ActorService(actorDAO);
+        DirectorService directorService = new DirectorService(directorDAO);
 
         actorService.findMoviesByActorId(1018).
                 forEach((key, value) -> {
@@ -68,6 +72,17 @@ public class Main {
                         List<MovieDTO> movieList = (List<MovieDTO>) value;
                         movieList.forEach(movieDTO -> System.out.println("ID: " + movieDTO.getId() +
                         " - Movie: " + movieDTO.getTitle() + " - Rating: " + movieDTO.getVoteAverage()));
+                    }
+                });
+
+        directorService.findMoviesByDirectorId(1184).
+                forEach((key, value) -> {
+                    if (key.equals("directorName")) {
+                        System.out.println("Director: " + value);
+                    } else if (key.equals("movies")) {
+                        List<MovieDTO> movieList = (List<MovieDTO>) value;
+                        movieList.forEach(movieDTO -> System.out.println("ID: " + movieDTO.getId() +
+                                " - Movie: " + movieDTO.getTitle() + " - Rating: " + movieDTO.getVoteAverage()));
                     }
                 });
 
