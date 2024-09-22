@@ -33,6 +33,9 @@ public class HibernateConfig {
             props.put("hibernate.show_sql", "true"); // show sql in console
             props.put("hibernate.format_sql", "true"); // format sql in console
             props.put("hibernate.use_sql_comments", "true"); // show sql comments in console
+//            props.put("hibernate.show_sql", "false"); // show sql in console
+//            props.put("hibernate.format_sql", "false"); // format sql in console
+//            props.put("hibernate.use_sql_comments", "false"); // show sql comments in console
 
             props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect"); // dialect for postgresql
             props.put("hibernate.connection.driver_class", "org.postgresql.Driver"); // driver class for postgresql

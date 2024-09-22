@@ -2,8 +2,11 @@ package app.services;
 
 import app.dao.ActorDAO;
 import app.entities.dtos.ActorDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.util.List;
+import java.util.Map;
 
 public class ActorService {
 
@@ -31,6 +34,10 @@ public class ActorService {
 
     public List<ActorDTO> findAllActors() {
         return actorDAO.findAll();
+    }
+
+    public Map<String, Object> findMoviesByActorId(Integer id) {
+        return actorDAO.moviesByActorId(id);
     }
 
 }
