@@ -23,7 +23,7 @@ public class Main {
 
         ApiReader apiReader = new ApiReader();
 
-//        apiReader.readMovieMultiple();
+        apiReader.readMovieMultiple();
 //        apiReader.apiMovies.forEach(System.out::println);
 //        apiReader.apiCredits.forEach(System.out::println);
 //        System.out.println("Amount of movies: " + apiReader.apiMovies.size());
@@ -43,48 +43,48 @@ public class Main {
         ApiDAO apiDAO = ApiDAO.getInstance(emf);
         apiDAO.persistAndUpdateAll(movies);
 
-        // It works nicely - adding an actor
-        MultiService multiService = MultiService.getInstance(emf);
-
-//        ActorDTO newActor = new ActorDTO();
-//        newActor.setName("Anthony Hopkins");
-//        multiService.createInDB(newActor);
-
-      
-        MovieDAO movieDAO = MovieDAO.getInstance(emf);
-        MovieService movieService = new MovieService(movieDAO);
-//        movieService.getHigestRatedMovies(10).forEach(movieDTO -> System.out.println("Highest: " + movieDTO.getTitle() + " - " + movieDTO.getVoteAverage()));
-//        movieService.getLowestRatedMovies(10).forEach(movieDTO -> System.out.println("Lowest: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()));
-//        movieService.getMostPopularMovies(10).forEach(movieDTO -> System.out.println("Popular: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()+ " - " +  movieDTO.getVoteCount()));
-//        movieService.searchForMovieByTitle("for").forEach(movieDTO -> {System.out.println(movieDTO.getTitle());});
-
-        // Finding movies by actor/director - maybe somewhat convoluted. Could be improved with controllers
-        ActorDAO actorDAO = ActorDAO.getInstance(emf);
-        DirectorDAO directorDAO = DirectorDAO.getInstance(emf);
-        ActorService actorService = new ActorService(actorDAO);
-        DirectorService directorService = new DirectorService(directorDAO);
-
-        actorService.findMoviesByActorId(1018).
-                forEach((key, value) -> {
-                    if (key.equals("actorName")) {
-                    System.out.println("Actor: " + value);
-                    } else if (key.equals("movies")) {
-                        List<MovieDTO> movieList = (List<MovieDTO>) value;
-                        movieList.forEach(movieDTO -> System.out.println("ID: " + movieDTO.getId() +
-                        " - Movie: " + movieDTO.getTitle() + " - Rating: " + movieDTO.getVoteAverage()));
-                    }
-                });
-
-        directorService.findMoviesByDirectorId(1184).
-                forEach((key, value) -> {
-                    if (key.equals("directorName")) {
-                        System.out.println("Director: " + value);
-                    } else if (key.equals("movies")) {
-                        List<MovieDTO> movieList = (List<MovieDTO>) value;
-                        movieList.forEach(movieDTO -> System.out.println("ID: " + movieDTO.getId() +
-                                " - Movie: " + movieDTO.getTitle() + " - Rating: " + movieDTO.getVoteAverage()));
-                    }
-                });
+//        // It works nicely - adding an actor
+//        MultiService multiService = MultiService.getInstance(emf);
+//
+////        ActorDTO newActor = new ActorDTO();
+////        newActor.setName("Anthony Hopkins");
+////        multiService.createInDB(newActor);
+//
+//
+//        MovieDAO movieDAO = MovieDAO.getInstance(emf);
+//        MovieService movieService = new MovieService(movieDAO);
+////        movieService.getHigestRatedMovies(10).forEach(movieDTO -> System.out.println("Highest: " + movieDTO.getTitle() + " - " + movieDTO.getVoteAverage()));
+////        movieService.getLowestRatedMovies(10).forEach(movieDTO -> System.out.println("Lowest: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()));
+////        movieService.getMostPopularMovies(10).forEach(movieDTO -> System.out.println("Popular: " + movieDTO.getTitle() + " - " +  movieDTO.getVoteAverage()+ " - " +  movieDTO.getVoteCount()));
+////        movieService.searchForMovieByTitle("for").forEach(movieDTO -> {System.out.println(movieDTO.getTitle());});
+//
+//        // Finding movies by actor/director - maybe somewhat convoluted. Could be improved with controllers
+//        ActorDAO actorDAO = ActorDAO.getInstance(emf);
+//        DirectorDAO directorDAO = DirectorDAO.getInstance(emf);
+//        ActorService actorService = new ActorService(actorDAO);
+//        DirectorService directorService = new DirectorService(directorDAO);
+//
+//        actorService.findMoviesByActorId(1018).
+//                forEach((key, value) -> {
+//                    if (key.equals("actorName")) {
+//                    System.out.println("Actor: " + value);
+//                    } else if (key.equals("movies")) {
+//                        List<MovieDTO> movieList = (List<MovieDTO>) value;
+//                        movieList.forEach(movieDTO -> System.out.println("ID: " + movieDTO.getId() +
+//                        " - Movie: " + movieDTO.getTitle() + " - Rating: " + movieDTO.getVoteAverage()));
+//                    }
+//                });
+//
+//        directorService.findMoviesByDirectorId(1012).
+//                forEach((key, value) -> {
+//                    if (key.equals("directorName")) {
+//                        System.out.println("Director: " + value);
+//                    } else if (key.equals("movies")) {
+//                        List<MovieDTO> movieList = (List<MovieDTO>) value;
+//                        movieList.forEach(movieDTO -> System.out.println("ID: " + movieDTO.getId() +
+//                                " - Movie: " + movieDTO.getTitle() + " - Rating: " + movieDTO.getVoteAverage()));
+//                    }
+//                });
 
         emf.close();
     }

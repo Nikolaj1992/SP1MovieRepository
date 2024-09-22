@@ -42,20 +42,24 @@ public class ApiDAO {
                     }
                 }
                 for (Actor actor : movie.getMovieCredits().getActors()) {
-                    Actor existingActor = em.find(Actor.class, actor.getId());
-                    if (existingActor == null) {
-                        em.persist(actor);
-                        actors.add(actor);
+                    if (actor != null) {
+                        Actor existingActor = em.find(Actor.class, actor.getId());
+                        if (existingActor == null) {
+                            em.persist(actor);
+                            actors.add(actor);
+                        }
+                        actors.add(existingActor);
                     }
-                    actors.add(existingActor);
                 }
                 for (Director director : movie.getMovieCredits().getDirectors()) {
-                    Director existingDirector = em.find(Director.class, director.getId());
-                    if (existingDirector == null) {
-                        em.persist(director);
-                        directors.add(director);
+                    if (director != null) {
+                        Director existingDirector = em.find(Director.class, director.getId());
+                        if (existingDirector == null) {
+                            em.persist(director);
+                            directors.add(director);
+                        }
+                        directors.add(existingDirector);
                     }
-                    directors.add(existingDirector);
                 }
                 movieCredits.setActors(new ArrayList<>(actors));
                 movieCredits.setDirectors(new ArrayList<>(directors));
@@ -75,19 +79,28 @@ public class ApiDAO {
         try(var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             List<Movie> moviesDB = em.createQuery("SELECT m FROM Movie m").getResultList();
+            List<Integer> moviesDbIds = moviesDB.stream().map(Movie::getId).toList();
+            List<Integer> moviesIds = movies.stream().map(Movie::getId).toList();
             List<Movie> moviesToPersist = new ArrayList<>();
             if (moviesDB.isEmpty()){
                 this.persistAll(movies);
             } else {
-
-            for (Movie movie : movies) {
-                if (!moviesDB.contains(movie.getId())) {
-                    moviesToPersist.add(movie);
+                for (int i = 0; i < movies.size(); i++) {
+                    if (!moviesDbIds.contains(movies.get(i).getId())) {
+                        moviesToPersist.add(movies.get(i));
+                    } else {
+                    if (i > moviesDbIds.size()) {
+                        moviesToPersist.add(movies.get(i));
+                    }
+                    }
                 }
-            }
             this.persistNewMovies(moviesToPersist);
             em.getTransaction().commit();
+            if (!moviesToPersist.isEmpty()){
             System.out.println("ApiDAO: updated database");
+            } else {
+                System.out.println("APIDAO: no new data provided, database is up to date");
+            }
             }
         }
     }
@@ -111,20 +124,24 @@ public class ApiDAO {
                         }
                     }
                     for (Actor actor : movie.getMovieCredits().getActors()) {
+                        if (actor != null) {
                         Actor existingActor = em.find(Actor.class, actor.getId());
                         if (existingActor == null) {
                             em.persist(actor);
                             actors.add(actor);
                         }
                         actors.add(existingActor);
+                        }
                     }
                     for (Director director : movie.getMovieCredits().getDirectors()) {
+                        if (director != null) {
                         Director existingDirector = em.find(Director.class, director.getId());
                         if (existingDirector == null) {
                             em.persist(director);
                             directors.add(director);
                         }
                         directors.add(existingDirector);
+                        }
                     }
                     movieCredits.setActors(new ArrayList<>(actors));
                     movieCredits.setDirectors(new ArrayList<>(directors));
@@ -132,7 +149,9 @@ public class ApiDAO {
                     em.persist(movie);
                 }
                 em.getTransaction().commit();
+                if (!movies.isEmpty()){
                 System.out.println("ApiDAO-updateAll(persist): saved data to database");
-            } //end of the query check
+                }
+            }
         }
     }
