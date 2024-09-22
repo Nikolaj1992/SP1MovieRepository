@@ -1,5 +1,6 @@
 package app.config;
 
+import app.entities.*;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.NoArgsConstructor;
 import org.hibernate.SessionFactory;
@@ -32,12 +33,16 @@ public class HibernateConfig {
             props.put("hibernate.show_sql", "true"); // show sql in console
             props.put("hibernate.format_sql", "true"); // format sql in console
             props.put("hibernate.use_sql_comments", "true"); // show sql comments in console
+//            props.put("hibernate.show_sql", "false"); // show sql in console
+//            props.put("hibernate.format_sql", "false"); // format sql in console
+//            props.put("hibernate.use_sql_comments", "false"); // show sql comments in console
 
             props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect"); // dialect for postgresql
             props.put("hibernate.connection.driver_class", "org.postgresql.Driver"); // driver class for postgresql
             props.put("hibernate.archive.autodetection", "class"); // hibernate scans for annotated classes
             props.put("hibernate.current_session_context_class", "thread"); // hibernate current session context
             props.put("hibernate.hbm2ddl.auto", "update"); // hibernate creates tables based on entities
+//            props.put("hibernate.hbm2ddl.auto", "create"); // hibernate creates tables based on entities
 
 
             return getEntityManagerFactory(configuration, props);
@@ -79,7 +84,11 @@ public class HibernateConfig {
 
     private static void getAnnotationConfiguration(Configuration configuration) {
         // add annotated classes
-//        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Movie.class);
+        configuration.addAnnotatedClass(MovieCredits.class);
+        configuration.addAnnotatedClass(Genre.class);
+        configuration.addAnnotatedClass(Actor.class);
+        configuration.addAnnotatedClass(Director.class);
     }
 
     public static EntityManagerFactory getEntityManagerFactoryConfig(Boolean isTest) {
