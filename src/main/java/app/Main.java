@@ -39,9 +39,9 @@ public class Main {
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryConfig(false);
 
-//        List<Movie> movies = apiReader.apiMovies.stream().map(mDTO -> new Movie(mDTO)).toList();
-//        ApiDAO apiDAO = ApiDAO.getInstance(emf);
-//        apiDAO.persistAll(movies);
+        List<Movie> movies = apiReader.apiMovies.stream().map(mDTO -> new Movie(mDTO)).toList();
+        ApiDAO apiDAO = ApiDAO.getInstance(emf);
+        apiDAO.persistAndUpdateAll(movies);
 
         // It works nicely - adding an actor
         MultiService multiService = MultiService.getInstance(emf);
