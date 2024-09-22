@@ -22,7 +22,7 @@ public class ApiDAO {
         return instance;
     }
 
-    public void persistAll(List<Movie> movies) {
+    private void persistAll(List<Movie> movies) {
         try(var em = emf.createEntityManager()) {
             em.getTransaction().begin();
             if ( em.find(Movie.class, movies.get(0).getId()) == null ) { //should just check if the database has data
@@ -71,5 +71,68 @@ public class ApiDAO {
         }
     }
 
-//    public void updateAll(List<Movie> movies) {} //this method may be needed in the future
-}
+    public void persistAndUpdateAll(List<Movie> movies) {
+        try(var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            List<Movie> moviesDB = em.createQuery("SELECT m FROM Movie m").getResultList();
+            List<Movie> moviesToPersist = new ArrayList<>();
+            if (moviesDB.isEmpty()){
+                this.persistAll(movies);
+            } else {
+
+            for (Movie movie : movies) {
+                if (!moviesDB.contains(movie.getId())) {
+                    moviesToPersist.add(movie);
+                }
+            }
+            this.persistNewMovies(moviesToPersist);
+            em.getTransaction().commit();
+            System.out.println("ApiDAO: updated database");
+            }
+        }
+    }
+
+    private void persistNewMovies(List<Movie> movies) {
+        try(var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+                for (Movie movie : movies) {
+                    List<Genre> genres = new ArrayList<>();
+                    List<Actor> actors = new ArrayList<>();
+                    List<Director> directors = new ArrayList<>();
+                    MovieCredits movieCredits = movie.getMovieCredits();
+
+                    for (Genre genre : movie.getGenres()) {
+                        Genre existingGenre = em.find(Genre.class, genre.getId());
+                        if (existingGenre == null) {
+                            em.persist(genre);
+                            genres.add(genre);
+                        } else {
+                            genres.add(existingGenre);
+                        }
+                    }
+                    for (Actor actor : movie.getMovieCredits().getActors()) {
+                        Actor existingActor = em.find(Actor.class, actor.getId());
+                        if (existingActor == null) {
+                            em.persist(actor);
+                            actors.add(actor);
+                        }
+                        actors.add(existingActor);
+                    }
+                    for (Director director : movie.getMovieCredits().getDirectors()) {
+                        Director existingDirector = em.find(Director.class, director.getId());
+                        if (existingDirector == null) {
+                            em.persist(director);
+                            directors.add(director);
+                        }
+                        directors.add(existingDirector);
+                    }
+                    movieCredits.setActors(new ArrayList<>(actors));
+                    movieCredits.setDirectors(new ArrayList<>(directors));
+                    em.persist(movieCredits);
+                    em.persist(movie);
+                }
+                em.getTransaction().commit();
+                System.out.println("ApiDAO-updateAll(persist): saved data to database");
+            } //end of the query check
+        }
+    }
