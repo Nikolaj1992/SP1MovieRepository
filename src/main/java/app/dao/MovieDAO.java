@@ -50,7 +50,7 @@ public class MovieDAO implements GenericDAO<MovieDTO, Integer> {
             Movie movie = new Movie(mDto);
             em.persist(movie);
             em.getTransaction().commit();
-            return new MovieDTO(movie);
+            return mDto;
         } catch (Exception e) {
             throw new DaoException.EntityCreateException(Movie.class, e);
         }
